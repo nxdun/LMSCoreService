@@ -7,7 +7,7 @@ const passwordComplexity = require('joi-password-complexity');
 
 //defining user Schema
 const courseSchema = new mongoose.Schema({
-    course_id: { type: mongoose.Schema.Types.ObjectId, unique: true},
+    course_id: { type: mongoose.Schema.Types.ObjectId,},// ✅ Remove `unique: true` from here
     approved: { type: Boolean, default: false }
 });
 
