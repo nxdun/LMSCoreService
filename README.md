@@ -1,2 +1,2 @@
-# LMSCoreService
-microservice based learning management system
+# lms-microservice
+Development of an Educational Platform for Online Learning Using Microservices
