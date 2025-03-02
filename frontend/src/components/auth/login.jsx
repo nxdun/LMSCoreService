@@ -66,7 +66,6 @@ const Login = () => {
     // Display success message and redirect on successful login
     if (success) {
 
-
       //success alert
       let timerInterval;
       Swal.fire({
