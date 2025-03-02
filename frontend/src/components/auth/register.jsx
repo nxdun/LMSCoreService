@@ -56,13 +56,13 @@ const Register = () => {
   //function to handle registration
   const handleRegister = async () => {
     try {
-      console.log("captcha validated. : ", captcha);
+      
       setLoading(true);
       // Validate input using Yup schema
       await userSchema.validate({ firstName, lastName, email, password }, { abortEarly: false });
       
       // Make a POST request to your backend API endpoint for user registration
-      await axios.post("http://localhost:5000/register", {
+      await axios.post(`${import.meta.env.VITE_AUTH_SERVER}/register`, {
         firstName: firstName,
         lastName: lastName,
         email: email,
@@ -127,6 +127,7 @@ const Register = () => {
   //function to handle form submission and registration
   const onSignUp = (e) => {
     e.preventDefault();
+    
     handleRegister();
   };
 
