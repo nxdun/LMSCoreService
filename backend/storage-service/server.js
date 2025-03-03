@@ -21,7 +21,6 @@ const storage = new Storage({
 });
 
 const bucket = storage.bucket(process.env.SERVICE_NAME_BUCKET);
-
 //multer middleware
 const multerMid = multer({
   storage: multer.memoryStorage(),
