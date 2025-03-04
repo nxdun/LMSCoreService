@@ -48,7 +48,7 @@ import {
 //learn course
 import LearnCourse from "src/components/learncourses";
 
-const apiUrl = "http://localhost:3001"; //API URL for paymeent gateway
+const apiUrl = "http://localhost:3001"; //API URL for payment gateway
 
 import Upload from "src/services/upload.jsx";
 
