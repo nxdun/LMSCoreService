@@ -1,5 +1,5 @@
-import express from 'express';
-import { sendNotification, updateNotificationStatus } from '../prisma/notificationService.js';
+const express =require('express');
+const { sendNotification, updateNotificationStatus } =require('../Services/NotificationService');
 
 const router = express.Router();
 
@@ -25,4 +25,4 @@ router.put('/update/:id', async (req, res) => {
     }
 });
 
-export default router;
+module.exports = router;

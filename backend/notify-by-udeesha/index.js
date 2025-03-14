@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const notificationRoutes= require('./Routes/NotificationRoute');
-
+app=express()
 dotenv.config();
 
 app.use(express.json());

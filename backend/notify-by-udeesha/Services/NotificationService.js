@@ -1,9 +1,9 @@
-import { PrismaClient } from '@prisma/client';
+const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
 // Function to send a new notification
-export async function sendNotification(userId, title, message, type) {
+async function sendNotification(userId, title, message, type) {
     const notification = await prisma.notification.create({
         data: {
             userId,
@@ -18,7 +18,7 @@ export async function sendNotification(userId, title, message, type) {
 }
 
 // Function to mark notification as sent
-export async function updateNotificationStatus(notificationId, status) {
+async function updateNotificationStatus(notificationId, status) {
     const updatedNotification = await prisma.notification.update({
         where: { id: notificationId },
         data: { status, sentAt: new Date() }
@@ -26,3 +26,5 @@ export async function updateNotificationStatus(notificationId, status) {
     console.log("Notification Updated:", updatedNotification);
     return updatedNotification;
 }
+
+module.exports = { sendNotification, updateNotificationStatus }; // ✅ CommonJS export
