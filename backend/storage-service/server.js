@@ -80,7 +80,6 @@ app.post("/api/upload", multerMid.single("file"), (req, res) => {
 
 //captcha
 app.post("/capcheck", async (req, res) => {
-  console.log("capcheck recived ", );
   try {
     if (!req.body.captcha) {
       return res.status(400).json({ message: "CapToken is required" });
@@ -90,8 +89,11 @@ app.post("/capcheck", async (req, res) => {
 
     const response = await axios.post(googleUrl);
     if (response.data.success) {
+      console.log("captcha verified from IP:", req.ip);
+
       res.status(200).json({ message: "CapToken is valid", success: true });
     } else {
+      console.log("captcha not verified from IP:", req.ip);
       res.status(400).json({ message: "CapToken is invalid", success: false });
     }
   } catch (error) {
