@@ -1,0 +1,78 @@
+# Dependencies
+node_modules
+node_modules/
+**/**/node_modules
+/.pnp
+.pnp.js
+
+# Package lock files
+package-lock.json
+yarn.lock
+
+# Testing
+/coverage
+
+# Production builds
+/build
+/dist
+**/dist
+**/build
+
+# Environment files
+**/.env
+.env.local
+.env.*.local
+
+# IDE files
+.vscode/
+**/.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/backend/authentication-service/error-logfile.log
+/backend/authentication-service/logfile.log
+
+# Python/Flask
+**/venv
+**/**/venv
+__pycache__/
+*.py[cod]
+*.so
+
+# Spring Boot
+**/target/
+**/.mvn/
+**/mvnw
+**/mvnw.cmd
+/backend/lecturer-service/.mvn
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Project specific
+**/.drawio
+*.drawio
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Kubernetes
+*.kubeconfig
+
+# Misc
+*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+/backend/storage-service/key.json
