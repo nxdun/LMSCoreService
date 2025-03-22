@@ -39,14 +39,13 @@ router.get("/courses/:id", async (req, res) => {
         
 
         let courses = [];
-        //! fix here
-        // for(let i = 0; i < user.enrolledCourses.length; i++){
-        //     console.log(`http://coursemanagement-service:3002/api/v1/courses/${user.enrolledCourses[i].toString()}`);
-        //     const course = await axios.get(`http://coursemanagement-service:3002/api/v1/courses/${user.enrolledCourses[i].toString()}`);
+        for(let i = 0; i < user.enrolledCourses.length; i++){
+            console.log(`http://coursemanagement-service:3002/api/v1/courses/${user.enrolledCourses[i].toString()}`);
+            const course = await axios.get(`http://coursemanagement-service:3002/api/v1/courses/${user.enrolledCourses[i].toString()}`);
 
-        //     courses.push(course.data);
-        // }
-        // console.log(courses);
+            courses.push(course.data);
+        }
+        console.log(courses);
         res.status(200).send(courses);
     }catch(error){
         //error handling
@@ -81,12 +80,10 @@ router.post("/", async (req, res) => {
         const u = await User.findOne({email: req.body.email});
 
         logger.info('User created successfully:', req.body.email);
-
-        //note: send notification to user from here
-        // axios.post('http://notification-service:1114/notifications', {
-        //     userId: u._id,
-        //     message: `⭐ Welcome ${u.firstName}  ${u.lastName} To the LMS!`
-        // });
+        axios.post('http://notification-service:1114/notifications', {
+            userId: u._id,
+            message: `⭐ Welcome ${u.firstName}  ${u.lastName} To the LMS!`
+        });
 
         //send success message
         res.status(201).send({message: "User created successfully!"});
@@ -133,11 +130,10 @@ router.post("/enroll/:id", async (req, res) => {
         await user.save();
         logger.info('Course enrolled successfully:', courseId);
 
-        // Note: send notification to user from here
-        // axios.post('http://notification-service:1114/notifications', {
-        //     userId: user._id,
-        //     message: `🎉 You have successfully enrolled in a new course! 📚`
-        // });
+        axios.post('http://notification-service:1114/notifications', {
+            userId: user._id,
+            message: `🎉 You have successfully enrolled in a new course! 📚`
+        });
 
         return res.status(200).send({ message: "Course enrolled successfully!" });
     } catch (error) {
@@ -242,11 +238,11 @@ router.delete("/enroll/:id", async (req, res) => {
         await user.save();
         logger.info('Course unenrolled successfully:', req.body.course);
 
-        // note: send notification to user from here
-        // axios.post('http://notification-service:1114/notifications', {
-        //     userId: user._id,
-        //     message: `❌ You have successfully unenrolled from a course!`
-        // });
+        //notification
+        axios.post('http://notification-service:1114/notifications', {
+            userId: user._id,
+            message: `❌ You have successfully unenrolled from a course!`
+        });
         
         res.status(200).send({message: "Course unenrolled successfully!"});
 
