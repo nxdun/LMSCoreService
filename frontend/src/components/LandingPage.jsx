@@ -148,11 +148,11 @@ const LandingPage = () => {
               Learn new skills and advance your career with our online courses.
             </Typography>
             <img
-              src="src/assets/landingpage-learn.svg"
+              src="src/assets/images/landingpage-learn.png"
               alt="placeholder"
               style={{
                 width: "100%",
-                maxWidth: "200px",
+                maxWidth: "300px",
                 borderRadius: "8px",
                 marginTop: "20px",
                 color: "white",
