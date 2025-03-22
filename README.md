@@ -12,3 +12,8 @@ try to run open all backends seprately for dev
 2. Place key.json at the repository root.
 3. Create a new bucket and grant the service account access.
 4. Set SERVICE_NAME_BUCKET and SERVICE_CAPTCHA_CODE environment variables.
+
+## TEST User email & Passwords
+- Admin admin1@gmail.com    |PWD Tu1234567@
+- Lec  lecturer@gmail.com   |PWD  Tu1234567@
+- Student student@gmail.com |PWD Tu1234567@
