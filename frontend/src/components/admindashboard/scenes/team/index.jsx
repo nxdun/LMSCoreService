@@ -82,7 +82,7 @@ const Team = () => {
     // Fetch user data from the backend API
     const fetchUserData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/getallusers");
+        const response = await fetch(`${import.meta.env.VITE_AUTH_SERVER}/getallusers`);
         if (!response.ok) {
           throw new Error("Failed to fetch user data");
         }
