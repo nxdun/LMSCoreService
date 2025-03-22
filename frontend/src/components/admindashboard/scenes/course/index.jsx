@@ -36,7 +36,7 @@ const Form = () => {
   const handleFormSubmit = async (values, actions) => {
     try {
       //sending form data to backend
-      const response = await fetch(`${import.meta.env.VITE_AUTH_SERVER}/courses`, {
+      const response = await fetch('http://localhost:5000/courses', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
