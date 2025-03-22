@@ -204,11 +204,12 @@ router.post("/enroll/:id", async (req, res) => {
         user.enrolledCourses.push(req.body.course);
         await user.save();
         logger.info('Course enrolled successfully:', req.body.course);
-        //notification
-        axios.post('http://notification-service:1114/notifications', {
-            userId: user._id,
-            message: `🎉 You have successfully enrolled in a new course! 📚`
-        });
+        //note: send notification to user from here
+        
+        // axios.post('http://notification-service:1114/notifications', {
+        //     userId: user._id,
+        //     message: `🎉 You have successfully enrolled in a new course! 📚`
+        // });
         res.status(200).send({message: "Course enrolled successfully!"});
     }catch(error){
         //error handling
