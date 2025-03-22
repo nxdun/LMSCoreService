@@ -174,7 +174,7 @@ app.use((_req, res) => {
 });
 
 // Define port for Express server
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 
 // Start Express server
 app.listen(PORT, () => {

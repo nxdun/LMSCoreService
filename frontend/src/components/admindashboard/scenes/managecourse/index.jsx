@@ -21,7 +21,7 @@ const CourseGrid = () => {
 
   const fetchCourses = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_AUTH_SERVER}/courses`);
+      const response = await fetch('http://localhost:3002/api/v1/courses');
       if (response.ok) {
         const data = await response.json();
         setCourses(data);
@@ -36,7 +36,7 @@ const CourseGrid = () => {
   const handleEdit = async (id) => {
     setEditCourseId(id);
     try {
-      const response = await fetch(`${import.meta.env.VITE_AUTH_SERVER}/courses/${id}`);
+      const response = await fetch(`http://localhost:3002/api/v1/courses/${id}`);
       if (response.ok) {
         const courseData = await response.json();
         setEditFormData(courseData);
@@ -50,7 +50,7 @@ const CourseGrid = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_AUTH_SERVER}/courses/${id}`, {
+      const response = await fetch(`http://localhost:3002/api/v1/courses/${id}`, {
         method: 'DELETE',
       });
       if (response.ok) {
@@ -72,7 +72,7 @@ const CourseGrid = () => {
 
   const handleEditFormSubmit = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_AUTH_SERVER}/courses/${editCourseId}`, {
+      const response = await fetch(`http://localhost:5000/courses/${editCourseId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
@@ -102,7 +102,7 @@ const CourseGrid = () => {
 
   const handleApprove = async (id) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_AUTH_SERVER}/courses/${id}/approve`, {
+      const response = await fetch(`http://localhost:3002/api/v1/courses/${id}/approve`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
