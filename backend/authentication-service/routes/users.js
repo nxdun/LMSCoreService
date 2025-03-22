@@ -83,6 +83,7 @@ router.post("/", async (req, res) => {
         logger.info('User created successfully:', req.body.email);
 
         //note: send notification to user from here
+        //! fix here
         // axios.post('http://notification-service:1114/notifications', {
         //     userId: u._id,
         //     message: `⭐ Welcome ${u.firstName}  ${u.lastName} To the LMS!`
@@ -209,6 +210,7 @@ router.post("/enroll/:id", async (req, res) => {
         await user.save();
         logger.info('Course enrolled successfully:', req.body.course);
         //note: send notification to user from here
+        //! fix here
         // axios.post('http://notification-service:1114/notifications', {
         //     userId: user._id,
         //     message: `🎉 You have successfully enrolled in a new course! 📚`
@@ -242,6 +244,7 @@ router.delete("/enroll/:id", async (req, res) => {
         logger.info('Course unenrolled successfully:', req.body.course);
 
         // note: send notification to user from here
+        //! fix here
         // axios.post('http://notification-service:1114/notifications', {
         //     userId: user._id,
         //     message: `❌ You have successfully unenrolled from a course!`
