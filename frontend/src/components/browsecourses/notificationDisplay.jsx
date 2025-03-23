@@ -14,7 +14,7 @@ import {
 import NotificationsNoneTwoToneIcon from '@mui/icons-material/NotificationsNoneTwoTone';
 import MarkChatReadIcon from "@mui/icons-material/MarkChatRead";
 import CheckIcon from "@mui/icons-material/Check";
-import axios from "axios";
+// import axios from "axios";
 
 const types = ["success", "info", "warning", "error"];
 
@@ -42,25 +42,25 @@ export default function DescriptionAlerts() {
 
   useEffect(() => {
     // Fetch notifications from the server
-    //TODO: replcae 1234 with the user id taken from the user's session: N
-    const fetchNotifications = async () => {
-      try {
+    //! add notification API here
+    // const fetchNotifications = async () => {
+    //   try {
 
-        //remove 1234 and replace with the user id taken from the user's session: N
-        const response = await axios.get(`http://localhost:5000/notify/${localStorage.getItem("token")}`);
-        const fetchedNotifications = response.data;
-        setNotifications(fetchedNotifications);
+    //     //remove 1234 and replace with the user id taken from the user's session: N
+    //     const response = await axios.get(`http://localhost:5000/notify/${localStorage.getItem("token")}`);
+    //     const fetchedNotifications = response.data;
+    //     setNotifications(fetchedNotifications);
 
-        // Calculate unread count
-        const newUnreadCount = fetchedNotifications.filter(notification => !notification.read).length;
-        setUnreadCount(newUnreadCount);
+    //     // Calculate unread count
+    //     const newUnreadCount = fetchedNotifications.filter(notification => !notification.read).length;
+    //     setUnreadCount(newUnreadCount);
 
-      } catch (error) {
-        console.error("Error fetching notifications:", error);
-      }
-    };
+    //   } catch (error) {
+    //     console.error("Error fetching notifications:", error);
+    //   }
+    // };
 
-    fetchNotifications(); // Fetch notifications when the component mounts
+    // fetchNotifications(); // Fetch notifications when the component mounts
   }, []); // Empty dependency array ensures that this effect runs only once, similar to componentDidMount
 
   //function to mark notifications as read

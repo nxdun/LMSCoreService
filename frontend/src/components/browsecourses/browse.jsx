@@ -11,7 +11,7 @@ export default function Browse() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const coursesResponse = await axios.get("http://localhost:5000/browse");
+                const coursesResponse = await axios.get(`${import.meta.env.VITE_AUTH_SERVER}/browse`);
                 const courses = coursesResponse.data;
     
                 const approvedCourses = courses.filter(course => course.approved === true);
@@ -19,7 +19,7 @@ export default function Browse() {
                 const coursesWithLecturers = await Promise.all(
                     approvedCourses.map(async course => {
                         console.log("Course ID:", course.lecturer_ID);
-                        const lecturerResponse = await axios.get(`http://localhost:5000/lecget/${course.lecturer_ID}`);
+                        const lecturerResponse = await axios.get(`${import.meta.env.VITE_AUTH_SERVER}/lecget/${course.lecturer_ID}`);
                         const lecturerData = lecturerResponse.data;
                         return { ...course, lecturer: lecturerData };
                     })

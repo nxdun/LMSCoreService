@@ -5,7 +5,7 @@ const Upload = () => {
     <Card>
       <CardContent>
         <form
-          action="http://localhost:5000/upload"
+          action={`${import.meta.env.VITE_AUTH_SERVER}/upload`}
           method="post"
           encType="multipart/form-data"
         >

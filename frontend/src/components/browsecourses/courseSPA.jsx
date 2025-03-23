@@ -27,14 +27,15 @@ const CourseSPA = () => {
       return;
     }
     const fetchCourseData = async () => {
+      
       try {
         const courseResponse = await axios.get(
-          `http://localhost:5000/browse/${id}`
+          `${import.meta.env.VITE_AUTH_SERVER}/browse/${id}`
         );
         const course = courseResponse.data;
 
         const lecturerResponse = await axios.get(
-          `http://localhost:5000/lecget/${course.lecturer_ID}`
+          `${import.meta.env.VITE_AUTH_SERVER}/lecget/${course.lecturer_ID}`
         );
         const lecturer = lecturerResponse.data;
 
