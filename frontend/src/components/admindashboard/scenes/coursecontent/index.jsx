@@ -18,7 +18,7 @@ const AddCourseForm = () => {
 
   useEffect(() => {
     // Fetch courses from API
-    axios.get("http://localhost:5000/browse")
+    axios.get(`${import.meta.env.VITE_AUTH_SERVER}/browse`)
       .then((response) => {
         setCourses(response.data); // Update courses state with fetched data
       })
@@ -72,7 +72,7 @@ const AddCourseForm = () => {
     console.log(values);
     // Here you can handle form submission, e.g., send data to an API
 
-    axios.post("http://localhost:5000/addcoursecontent", values)
+    axios.post(`${import.meta.env.VITE_AUTH_SERVER}/addcoursecontent`, values)
       .then((response) => {
         console.log("Response:", response.data);
         alert("Course content added successfully!");

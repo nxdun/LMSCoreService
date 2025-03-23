@@ -27,7 +27,7 @@ const LearnCourse = () => {
   useEffect(() => {
     // Fetch course content
     axios
-      .get(`http://localhost:5000/addcoursecontent/${id}`)
+      .get(`${import.meta.env.VITE_AUTH_SERVER}/addcoursecontent/${id}`)
       .then((response) => {
         const { videoUrls, chapters, quizzes } = response.data;
         setVideoURLs(videoUrls);

@@ -25,7 +25,7 @@ const MyCourses = () => {
     const fetchContent = async () => {
       try {
         const courseResponse = await axios.get(
-          `http://localhost:5000/getenrolledcoursedatabyuid/${userid}`
+          `${import.meta.env.VITE_AUTH_SERVER}/getenrolledcoursedatabyuid/${userid}`
         );
   
         if (!courseResponse.data || courseResponse.data.length === 0) {
@@ -48,7 +48,7 @@ const MyCourses = () => {
           coursesArray.map(async (course) => {
             console.log("Course ID:", course.lecturer_ID);
             const lecturerResponse = await axios.get(
-              `http://localhost:5000/lecget/${course.lecturer_ID}`
+              `${import.meta.env.VITE_AUTH_SERVER}/lecget/${course.lecturer_ID}`
             );
             const lecturer = lecturerResponse.data;
             return { ...course, lecturer };
