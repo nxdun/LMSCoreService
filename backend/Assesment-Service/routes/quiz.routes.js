@@ -1,5 +1,5 @@
 const express = require('express');
-const quizService = require('../services/QuizService');
+const quizService = require('../services/QuizeService');
 const router = express.Router();
 
 // Create quiz
