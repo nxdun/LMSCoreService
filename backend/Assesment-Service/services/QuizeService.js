@@ -1,13 +1,19 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require('../generated/prisma');
+
 const prisma = new PrismaClient();
 
 // Create a quiz
 async function createQuiz(quizData) {
-  const { questions, ...quizInfo } = quizData;
-  
+  const { questions, courseId, ...quizInfo } = quizData;
+
+  if (!courseId) {
+    throw new Error("courseId is required to create a quiz.");
+  }
+
   const quiz = await prisma.quiz.create({
     data: {
       ...quizInfo,
+      courseId, // Include the courseId
       questions: {
         create: questions.map((q, index) => ({
           ...q,
@@ -17,7 +23,7 @@ async function createQuiz(quizData) {
     },
     include: { questions: true }
   });
-  
+
   return quiz;
 }
 
@@ -61,9 +67,22 @@ async function submitQuizAttempt(quizId, userId, answers) {
 }
 
 // Other methods: getQuizById, updateQuiz, deleteQuiz, getQuizAttempts, etc.
+// Get quiz by ID
+async function getQuizById(quizId) {
+  const quiz = await prisma.quiz.findUnique({
+    where: { id: quizId },
+    include: { questions: true } // Include related questions
+  });
 
+  if (!quiz) {
+    throw new Error("Quiz not found");
+  }
+
+  return quiz;
+}
 module.exports = {
   createQuiz,
   submitQuizAttempt,
+  getQuizById
   // Export other methods
 };

@@ -17,7 +17,6 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 // Default route
 app.get('/', (req, res) => {
@@ -30,16 +29,6 @@ app.use('/api/quizzes', quizRoutes);
 // app.use('/api/assignments', assignmentRoutes);
 // app.use('/api/grading', gradingRoutes);
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({
-    message: err.message,
-    error: process.env.NODE_ENV === 'production' ? {} : err
-  });
-});
-
-// 404 handler
 app.use((req, res) => {
   res.status(404).json({ message: 'Resource not found' });
 });
