@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -13,7 +7,7 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-// schema.prisma
+
 model Quiz {
   id          String       @id @default(uuid())
   courseId    String
@@ -32,23 +26,23 @@ model Question {
   quizId      String
   quiz        Quiz         @relation(fields: [quizId], references: [id])
   content     String
-  type        String       // multiple_choice, true_false, essay, etc.
-  options     Json?        // for multiple choice questions
-  correctAnswer String?     // For auto-graded questions
+  type        String
+  options     Json?
+  correctAnswer String?
   points      Int          @default(1)
   order       Int          @default(0)
 }
 
 model QuizAttempt {
-  id          String       @id @default(uuid())
+  id          String   @id @default(uuid())
   quizId      String
-  quiz        Quiz         @relation(fields: [quizId], references: [id])
+  quiz        Quiz     @relation(fields: [quizId], references: [id])
   userId      String
-  answers     Json         // Array of {questionId, answer}
-  score       Float?       // Calculated score
-  startedAt   DateTime     @default(now())
-  submittedAt DateTime?    // Null if not yet submitted
-  graded      Boolean      @default(false)
+  answers     Json     // Array of {questionId, answer}
+  score       Float?   // Calculated score
+  startedAt   DateTime @default(now())
+  submittedAt DateTime?
+  graded      Boolean  @default(false)
   feedback    String?
 }
 
