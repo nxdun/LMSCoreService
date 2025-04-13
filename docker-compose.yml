@@ -27,6 +27,9 @@ services:
       - SERVICE_NAME_NOTIFICATION=http://notification-service:1114
       - SERVICE_NAME_PROFILE=http://profile-management-SERVICE:1117
       - SERVICE_NAME_STORAGE=http://storage-service:2345
+      - SERVICE_NAME_SUPPORT=http://localhost:1118
+      - SERVICE_NAME_NOTIFICATION=http://localhost:1114/
+
   lecturer-service:
     container_name: lecurers
     build: ./backend/lecturer-service/
@@ -54,17 +57,6 @@ services:
     environment:
       - DB=mongodb+srv://
 
-  notification-service:
-    container_name: notifications
-    build: ./backend/notification-service/
-    ports:
-      - "1114:1114"
-    volumes:
-      - ./backend/notification-service:/app
-    environment:
-      - PORT=1114
-      - MONGODB_URI=mongodb+srv://
-
   storage-service:
     container_name: storage
     build: ./backend/storage-service/
@@ -72,16 +64,70 @@ services:
       - "2345:2345"
     volumes:
       - ./backend/storage-service:/app
-      
-  # profile-management-service:
-  #     container_name: profiles
-  #     build: ./backend/profile-management-service/
-  #     ports:
-  #       - "1117:1117"
-  #     volumes:
-  #       - ./backend/profile-management-service:/app
-  #     environment:
-  #       - PORT=1117
-  #       - MONGODB_URI=mongodb+srv://zombie:boooooo@nxdun.dio0b.mongodb.net/profile-management-service?retryWrites=true&w=majority&appName=LMS
-        
+
+  app:
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - "1114:1114"
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@db:5432/notifydb
+      - PORT=1114
+    depends_on:
+      - db
+
+  db:
+    image: postgres:14
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: notifydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  support-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: support-backend
+    restart: unless-stopped
+    ports:
+      - "8074:8074"
+    environment:
+      - MONGODB_URI=mongodb+srv://rukshan:rukshan123@cluster0.w9lemr4.mongodb.net/AssignmentAF?retryWrites=true&w=majority&appName=Cluster0
+      - SECRET_KEY=mysecret
+      - PORT=8074
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - lms-network
+    depends_on:
+      - email-service
+
+  email-service:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: email-service
+    restart: unless-stopped
+    ports:
+      - "8076:8076"
+    volumes:
+      - ./:/usr/app
+      - /usr/app/node_modules
+    networks:
+      - lms-network
+
+networks:
+  lms-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+
 
