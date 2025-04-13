@@ -9,7 +9,7 @@ app.use(express.json());
 
 app.use('/notifications', notificationRoutes);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 1114;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
