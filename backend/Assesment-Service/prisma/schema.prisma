@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Quiz {
+  id          String       @id @default(uuid())
+  courseId    String
+  title       String
+  description String?
+  timeLimit   Int?         // in minutes
+  dueDate     DateTime?
+  questions   Question[]
+  attempts    QuizAttempt[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Question {
+  id          String       @id @default(uuid())
+  quizId      String
+  quiz        Quiz         @relation(fields: [quizId], references: [id])
+  content     String
+  type        String
+  options     Json?
+  correctAnswer String?
+  points      Int          @default(1)
+  order       Int          @default(0)
+}
+
+model QuizAttempt {
+  id          String   @id @default(uuid())
+  quizId      String
+  quiz        Quiz     @relation(fields: [quizId], references: [id])
+  userId      String
+  answers     Json     // Array of {questionId, answer}
+  score       Float?   // Calculated score
+  startedAt   DateTime @default(now())
+  submittedAt DateTime?
+  graded      Boolean  @default(false)
+  feedback    String?
+}
+
+model Assignment {
+  id          String       @id @default(uuid())
+  courseId    String
+  title       String
+  description String
+  dueDate     DateTime
+  submissions AssignmentSubmission[]
+  rubric      Json?        // Grading criteria
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model AssignmentSubmission {
+  id            String     @id @default(uuid())
+  assignmentId  String
+  assignment    Assignment @relation(fields: [assignmentId], references: [id])
+  userId        String
+  content       String?    // Text content or file path
+  fileUrls      Json?      // Array of uploaded file URLs
+  submittedAt   DateTime   @default(now())
+  grade         Float?     // Final grade
+  feedback      String?    // Instructor feedback
+  plagiarismScore Float?   // Percentage of similarity detected
+}
