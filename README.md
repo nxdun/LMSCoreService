@@ -17,6 +17,11 @@ try to run open all backends seprately for dev
 - Admin admin1@gmail.com    |PWD Tu1234567@
 - Lec  lecturer@gmail.com   |PWD  Tu1234567@
 - Student student@gmail.com |PWD Tu1234567@
+
+# Payment Service
+1. venv\Scripts\activate
+2. pip install -r requirements.txt
+3. python app.py
 ## how to run on mac
 - chmod +x open_all_backend.
 - ./open_all_backend.sh
