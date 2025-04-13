@@ -1,5 +1,5 @@
 const Ticket = require("../models/TicketModel"); // Update the path according to your project structure
-const sendEmail=require('../../email-service/util/sendEmail')
+const sendEmail=require('../../../email-service/util/sendEmail')
 // Create a new Ticket
 const createTicket = async (req, res) => {
   try {
