@@ -2,7 +2,7 @@ import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import { Navbar, SideBar } from "src/components/admindashboard/scenes";
 import { Outlet } from "react-router-dom";
-import React, { createContext, useState } from "react";
+import { createContext, useState } from "react";
 export const ToggledContext = createContext(null);
 
 function App() {
@@ -10,7 +10,6 @@ function App() {
   const [toggled, setToggled] = useState(false);
   const values = { toggled, setToggled };
   return (
-    <React.StrictMode>
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
@@ -35,7 +34,6 @@ function App() {
         </ToggledContext.Provider>
       </ThemeProvider>
     </ColorModeContext.Provider>
-  </React.StrictMode>
   );
 }
 

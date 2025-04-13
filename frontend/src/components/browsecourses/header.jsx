@@ -77,8 +77,21 @@ const Header = ({ value, setValue, logsOut }) => {
   //fetch notifications for the logged-in user
   const fetchNotifications = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/notify/1234`);
-      const notificationsData = response.data;
+      // const response = await axios.get(`http://localhost:5000/notify/1234`);
+      //! added fake data here implement actual notificatuion fetching
+      let data = [
+        {
+          id: 1,
+          message: "New course available!",
+          timestamp: "2023-10-01T12:00:00Z"
+        },
+        {
+          id: 2,
+          message: "Your course has been approved!",
+          timestamp: "2023-10-02T14:00:00Z"
+        }
+      ];
+      const notificationsData = data;
       setNotifications(notificationsData); // Update notifications state with fetched data
     } catch (error) {
       console.error("Error fetching notifications:", error);
