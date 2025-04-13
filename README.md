@@ -17,3 +17,6 @@ try to run open all backends seprately for dev
 - Admin admin1@gmail.com    |PWD Tu1234567@
 - Lec  lecturer@gmail.com   |PWD  Tu1234567@
 - Student student@gmail.com |PWD Tu1234567@
+## how to run on mac
+- chmod +x open_all_backend.
+- ./open_all_backend.sh
