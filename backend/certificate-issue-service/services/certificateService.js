@@ -4,7 +4,11 @@ const { getGridFSBucket } = require('../config/db');
 
 const createCertificatePDF = (username, courseName) => {
   return new Promise((resolve, reject) => {
-    const doc = new PDFDocument();
+    const doc = new PDFDocument({
+      size: 'A4',
+      margin: 50,
+    });
+
     const buffers = [];
 
     doc.on('data', buffers.push.bind(buffers));
@@ -30,15 +34,40 @@ const createCertificatePDF = (username, courseName) => {
       uploadStream.on('error', reject);
     });
 
-    doc.fontSize(24).text('Certificate of Completion', { align: 'center', underline: true });
-    doc.moveDown().fontSize(20).text(`This certifies that`);
-    doc.fontSize(26).text(username, { align: 'center' });
-    doc.moveDown().fontSize(20).text(`has completed the course`);
-    doc.fontSize(24).text(courseName, { align: 'center' });
-    doc.moveDown().fontSize(16).text(`Date: ${new Date().toLocaleDateString()}`, { align: 'right' });
+    // Draw a blue border rectangle
+    const borderWidth = 5;
+    doc.rect(
+      borderWidth / 2,
+      borderWidth / 2,
+      doc.page.width - borderWidth,
+      doc.page.height - borderWidth
+    )
+    .lineWidth(borderWidth)
+    .strokeColor('blue')
+    .stroke();
+
+    // Add Certificate Content
+    doc.moveDown(3);
+    doc.fontSize(24).fillColor('#000').text('Certificate of Completion', { align: 'center', underline: true });
+
+    doc.moveDown(2);
+    doc.fontSize(20).text(`This certifies that`, { align: 'center' });
+
+    doc.moveDown(1);
+    doc.fontSize(26).fillColor('black').text(username, { align: 'center', underline: true });
+
+    doc.moveDown(1);
+    doc.fontSize(20).fillColor('black').text(`has successfully completed the course`, { align: 'center' });
+
+    doc.moveDown(1);
+    doc.fontSize(24).fillColor('blue').text(courseName, { align: 'center' });
+
+    doc.moveDown(2);
+    doc.fontSize(16).fillColor('black').text(`Date: ${new Date().toLocaleDateString()}`, { align: 'right' });
 
     doc.end();
   });
 };
 
 module.exports = { createCertificatePDF };
+
