@@ -1,0 +1,3 @@
+spring.application.name=lecsrv
+server.port=1113
+spring.data.mongodb.uri=mongodb+srv://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${MONGODB_CLUSTER}/${MONGODB_DATABASE}?retryWrites=true&w=majority&appName=LMS

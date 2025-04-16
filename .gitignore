@@ -22,6 +22,7 @@ yarn.lock
 **/.env
 .env.local
 .env.*.local
+.env
 
 # IDE files
 .vscode/
@@ -31,6 +32,8 @@ yarn.lock
 *.njsproj
 *.sln
 *.sw?
+.idea/
+*.iml
 
 # Logs
 *.log
@@ -53,6 +56,7 @@ __pycache__/
 **/mvnw
 **/mvnw.cmd
 /backend/lecturer-service/.mvn
+target/
 
 # System Files
 .DS_Store
@@ -76,3 +80,13 @@ docker-compose.override.yml
 .env.production.local
 
 /backend/storage-service/key.json
+
+# Application properties with sensitive data
+**/application-dev.properties
+**/application-prod.properties
+**/application.properties
+
+# Build files
+build/
+out/
+*.class
