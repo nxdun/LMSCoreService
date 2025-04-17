@@ -22,3 +22,13 @@ try to run open all backends seprately for dev
 1. venv\Scripts\activate
 2. pip install -r requirements.txt
 3. python app.py
+
+
+# Start & Build All containers.
+```
+docker-compose up --build
+```
+# Run the containers
+```
+docker-compose up
+```
