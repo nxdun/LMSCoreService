@@ -11,7 +11,7 @@ COPY package.json ./
 RUN npm install
 
 # expose the port
-EXPOSE 5000
+EXPOSE 5001
 
 # Copy the entire src directory
 COPY . .
