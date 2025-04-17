@@ -10,7 +10,7 @@ function PaymentPage({ apiUrl }) {
 
   const makePayment = async () => {
     try {
-      const stripe = await loadStripe('pk_test_51PBff92LxlKPHBMAvdpHbLfvrowceNrOKe3HkNoVG8b9ZSAvn1vbdR11MjTIDw8gHmNI9BSt8VwNxeHrOe43Nrzg00HWzJkvXo');
+      const stripe = await loadStripe('pk_test_51PBfN6Rw8nSAo9nW8VB9Pscz74HIE3v3othGtpqNfYzrtXcLImTcgzD3h8DoOPRXDuKkzqSrxq49xvehsL1bGcGL003OHNGvyi');
 
       const body = {
         products: [

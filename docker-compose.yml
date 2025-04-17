@@ -46,7 +46,7 @@ services:
     volumes:
       - ./backend/payment-service-py:/app
     environment:
-      STRIPE_SECRET_KEY: "sk_test_51PBff92LxlKPHBMAiyaAfpPv4m43et8Lo3JSoce8Vy6hODBwhwcOghK5UnPWsKEqHN1B0KYScn4raFtoFaYQh5tW00MSqrccuW"
+      STRIPE_SECRET_KEY: "sk_test_51PBfN6Rw8nSAo9nWuO0GPDCwJqS0UJiybylptkCnJHoM7Yam39lFOm3Is6G5TV4bU6jFlhPxRog8ZfcjuHygBDyr004wH0dyUt"
       CLIENT_URL: "http://localhost:5173"
   coursemanagement-service:
     container_name: courses
