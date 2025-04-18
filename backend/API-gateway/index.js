@@ -1,9 +1,9 @@
 /**
  * API Gateway
- * 
+ *
  * This service routes requests to appropriate microservices and provides centralized
  * authentication, logging, and error handling.
- * 
+ *
  * @author nxdun
  * @version 1.0.0
  */
@@ -24,14 +24,14 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 
 // Environment configuration - can be extended to support multiple environments
-const ENVIRONMENT = process.env.NODE_ENV || 'development';
-const isProduction = ENVIRONMENT === 'production';
+const ENVIRONMENT = process.env.NODE_ENV || "development";
+const isProduction = ENVIRONMENT === "production";
 
 // Configure CORS options
 const corsOptions = {
-  origin: isProduction ? process.env.ALLOWED_ORIGINS?.split(',') : '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key']
+  origin: isProduction ? process.env.ALLOWED_ORIGINS?.split(",") : "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "x-api-key"],
 };
 
 // ==========================================================================
@@ -39,10 +39,10 @@ const corsOptions = {
 // ==========================================================================
 
 // Security and utility middleware
-app.use(cors(corsOptions));                 // Enable CORS with configuration
-app.use(helmet());                          // Add security headers
-app.use(morgan(isProduction ? 'combined' : 'dev')); // Log HTTP requests
-app.disable("x-powered-by");                // Hide Express server information
+app.use(cors(corsOptions)); // Enable CORS with configuration
+app.use(helmet()); // Add security headers
+app.use(morgan(isProduction ? "combined" : "dev")); // Log HTTP requests
+app.disable("x-powered-by"); // Hide Express server information
 
 // ==========================================================================
 // Service Routes Configuration
@@ -103,6 +103,12 @@ const services = [
     description: "Get single lecturer data - viewable for any user role",
   },
   {
+    route: "/transferlecturer",
+    target: `${process.env.SERVICE_NAME_LEC}/api/v1/lecturer`,
+    headers: { "x-api-key": "apikey" },
+    description: "---Inter service Communication : authentication > lecturer service---",
+  },
+  {
     route: "/checkout",
     target: `${process.env.SERVICE_NAME_PAY}/create-checkout-session`,
     headers: { "x-api-key": "apikey" },
@@ -124,7 +130,8 @@ const services = [
     route: "/browse",
     target: `${process.env.SERVICE_NAME_COURSE}/api/v1/courses`,
     headers: { "x-api-key": "apikey" },
-    description: "Get all courses with CRUD operations - Frontend displays them filtered by approval state",
+    description:
+      "Get all courses with CRUD operations - Frontend displays them filtered by approval state",
   },
   {
     route: "/addcoursecontent",
@@ -154,14 +161,14 @@ const services = [
  * Middleware to set appropriate headers for each route
  * Extracts the route from the URL and finds the matching service
  * to apply the correct headers
- * 
+ *
  * @param {express.Request} req - Express request object
  * @param {express.Response} res - Express response object
  * @param {express.NextFunction} next - Express next function
  */
 function setHeaders(req, res, next) {
   try {
-    const pathSegments = req.originalUrl.split('/');
+    const pathSegments = req.originalUrl.split("/");
     const route = pathSegments[1]; // Get route from URL
     const service = services.find((s) => s.route === `/${route}`);
 
@@ -174,7 +181,7 @@ function setHeaders(req, res, next) {
 
     next();
   } catch (error) {
-    console.error('Error in setHeaders middleware:', error);
+    console.error("Error in setHeaders middleware:", error);
     next(error); // Pass error to error handler
   }
 }
@@ -201,7 +208,7 @@ function setupProxyRoutes() {
           [`^${route}`]: "",
         },
         // Optional logging for debugging
-        logLevel: isProduction ? 'silent' : 'info',
+        logLevel: isProduction ? "silent" : "info",
         // Error handling for proxy
         onError: (err, req, res) => {
           console.error(`Proxy error for ${route}:`, err);
@@ -211,14 +218,14 @@ function setupProxyRoutes() {
             message: `Service unavailable: ${description || route}`,
             data: null,
           });
-        }
+        },
       };
 
       // Apply proxy middleware
       app.use(route, createProxyMiddleware(proxyOptions));
     });
   } catch (err) {
-    console.error('Error setting up proxy routes:', err);
+    console.error("Error setting up proxy routes:", err);
     process.exit(1); // Exit if proxy setup fails
   }
 }
@@ -242,7 +249,7 @@ app.use((_req, res) => {
 
 // Global error handler
 app.use((err, req, res, next) => {
-  console.error('Unhandled application error:', err);
+  console.error("Unhandled application error:", err);
   res.status(500).json({
     code: 500,
     status: "Error",
@@ -265,23 +272,27 @@ app.listen(PORT, () => {
   🌎 Environment: ${ENVIRONMENT}
   =====================================================
   `);
-  
+
   if (!isProduction) {
-    console.log('  Available routes:');
-    services.forEach(s => {
-      console.log(`  •\x1b[45m${s.route}\x1b[0m  →  \x1b[36m${s.target}\x1b[0m  (\x1b[32m${s.description || 'No description'}\x1b[0m)`);
+    console.log("  Available routes:");
+    services.forEach((s) => {
+      console.log(
+        `  •\x1b[45m${s.route}\x1b[0m  →  \x1b[36m${
+          s.target
+        }\x1b[0m  (\x1b[32m${s.description || "No description"}\x1b[0m)`
+      );
     });
-    console.log('=====================================================');
+    console.log("=====================================================");
   }
 });
 
 // Handle unhandled promise rejections
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
 });
 
 // Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('SIGTERM received, shutting down gracefully');
+process.on("SIGTERM", () => {
+  console.log("SIGTERM received, shutting down gracefully");
   process.exit(0);
 });

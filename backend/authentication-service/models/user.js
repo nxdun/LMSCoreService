@@ -40,18 +40,24 @@ const User = mongoose.model('User', userSchema);
 const validate = (data) => {
     const schema = joi.object({
         firstName: joi.string().required().label("First Name"),
-        lastName: joi.string().required().label("Lirst Name"),
+        lastName: joi.string().required().label("Last Name"),
         email: joi.string().required().label("Email"),
         password: passwordComplexity().required().label("Password"),
-        role: joi.string().valid('learner', 'lecturer', 'admin').required().label("Role")
+        role: joi.string().valid('learner', 'lecturer', 'admin').required().label("Role"),
+        ppic: joi.string().uri().when('role', { is: 'lecturer', then: joi.required() }).label("Profile Picture URL"),
+        socialMedia: joi.array()
+            .items(joi.string().uri().label("Social Media URL"))
+            .max(4)
+            .when('role', { is: 'lecturer', then: joi.required() })
+            .label("Social Media Links")
     });
 
-    // Set default role to 'student' if not provided
+    // Set default role to 'learner' if not provided
     if (!data.role) {
         data.role = 'learner';
     }
 
     return schema.validate(data);
-}
+};
 
 module.exports = { User, validate };
