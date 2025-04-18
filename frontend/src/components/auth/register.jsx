@@ -12,16 +12,19 @@ import {
   Typography,
   Link,
 } from "@mui/material";
-import Swal from "sweetalert2"; 
+import Swal from "sweetalert2";
 
-import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
-import DynamicBackdrop from 'src/components/common/backdrop'; // Import the backdrop component
+import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
+import DynamicBackdrop from "src/components/common/backdrop"; // Import the backdrop component
 import ReCAPTCHA from "react-google-recaptcha";
 // Define Yup schema for validation
 const userSchema = yup.object().shape({
   firstName: yup.string().required("First Name is required"),
   lastName: yup.string().required("Last Name is required"),
-  email: yup.string().email("Invalid email format").required("Email is required"),
+  email: yup
+    .string()
+    .email("Invalid email format")
+    .required("Email is required"),
   password: yup
     .string()
     .required("Password is required")
@@ -94,11 +97,13 @@ const Register = () => {
   //function to handle registration
   const handleRegister = async () => {
     try {
-      
       setLoading(true);
       // Validate input using Yup schema
-      await userSchema.validate({ firstName, lastName, email, password }, { abortEarly: false });
-      
+      await userSchema.validate(
+        { firstName, lastName, email, password },
+        { abortEarly: false }
+      );
+
       // Make a POST request to your backend API endpoint for user registration
       await axios.post(`${import.meta.env.VITE_AUTH_SERVER}/register`, {
         firstName: firstName,
@@ -146,11 +151,13 @@ const Register = () => {
           text: "Please check the form for errors",
         });
 
-        setValidationErrors(error.inner.reduce((acc, curr) => {
-          acc[curr.path] = curr.message;
-          return acc;
-        }, {}));
-      } else {  
+        setValidationErrors(
+          error.inner.reduce((acc, curr) => {
+            acc[curr.path] = curr.message;
+            return acc;
+          }, {})
+        );
+      } else {
         Swal.fire({
           icon: "error",
           title: "Registration Error",
@@ -165,12 +172,12 @@ const Register = () => {
   //function to handle form submission and registration
   const onSignUp = (e) => {
     e.preventDefault();
-    
+
     handleRegister();
   };
 
   return (
-    <Grid>
+    <Grid container style={{ overflow: "hidden" }}>
       <Paper elevation={10} style={paperStyle}>
         <Grid align="center">
           <Avatar style={avatarStyle}>

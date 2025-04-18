@@ -18,8 +18,6 @@ import ReCAPTCHA from "react-google-recaptcha";
 import axios from "axios";
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 
-// Disable scrollbar for the entire UI
-document.body.style.overflow = "hidden";
 
 //functional component for the login page
 const Login = () => {
@@ -179,7 +177,7 @@ const Login = () => {
     }
   };
   return (
-    <Grid>
+    <Grid container style={{ overflow: "hidden" }}>
       <Paper elevation={10} style={paperStyle}>
         <Grid align="center">
           <Avatar style={avatarStyle}>
