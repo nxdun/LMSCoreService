@@ -5,26 +5,29 @@
 html,
 body,
 #root {
+  background: url("./assets/commonbg.jpg") no-repeat center center fixed;
   height: 100%;
   width: 100%;
   font-family: "Source Sans 3", sans-serif;
 }
 
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 12px;
+  height: 12px;
 }
 
-/* Track */
 ::-webkit-scrollbar-track {
-  background: #e0e0e0;
+  background: linear-gradient(45deg, #f3f3f3, #e0e0e0);
+  border-radius: 10px;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: linear-gradient(45deg, #6a11cb, #2575fc);
+  border-radius: 10px;
+  border: 3px solid #f3f3f3;
 }
 
-/* Handle on hover */
-::-webkit-scrollbar-track:hover {
-  background: #555;
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #4e0ec8, #1e5edc);
 }
