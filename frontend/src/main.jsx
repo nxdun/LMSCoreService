@@ -9,7 +9,7 @@ import {
   Navigate,
 } from "react-router-dom";
 
-// LOGIn
+// LOGIN Babies
 import { LogoutHandler } from "src/services/logoutHandler";
 import LoginScreen from "src/components/auth/login";
 import LoginLanding from "src/components/auth";

@@ -66,8 +66,8 @@ export default function JwtLogin() {
     setLoading(true);
     try {
         // Exclude the "remember" field from the values object
-        const { remember, ...authData } = values;
-        const url = "http://localhost:2222/api/v1/auth";
+        const { remember, ...authData } = values; 
+        const url = `${import.meta.env.VITE_AUTH_SERVER}/login`;
         const response = await axios.post(url, authData);
         console.log("Response Data:", response.data); // Log the response data
         const { token, role, email } = response.data.data;
