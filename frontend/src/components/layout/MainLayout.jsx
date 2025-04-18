@@ -1,4 +1,3 @@
-import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText, Container, Box } from '@mui/material';
 import { Assignment, Quiz, Dashboard, Person } from '@mui/icons-material';

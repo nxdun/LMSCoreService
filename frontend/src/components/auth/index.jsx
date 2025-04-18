@@ -39,8 +39,11 @@ const StyledCard = styled(Card)({
   position: 'relative',
   borderRadius: '15px',
   overflow: 'hidden',
-  backgroundColor: '#333',
+  backgroundColor: 'rgba(255, 255, 255, 0.1)',
   color: '#fff',
+  backdropFilter: 'blur(30px)',
+  boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+  border: '1px solid rgba(255, 255, 255, 0.3)',
   transition: 'transform 0.3s ease',
   '&:hover': {
     transform: 'scale(1.05)',
@@ -99,7 +102,7 @@ const AuthLanding = () => {
         {cards.map((card, index) => (
           <Grid item xs={12} md={4} key={index}>
             <StyledCard>
-              <CardOverlay >
+              <CardOverlay>
                 <CardContent>
                   <Typography variant="h5" sx={{ top: "10vh", left: "20vh", position: "absolute" }}>
                     {card.title}
@@ -112,9 +115,30 @@ const AuthLanding = () => {
                   />
                 </CardContent>
                 <CardActions>
-                  <Button fullWidth size="large" sx={{ top: "vh", right: "2vh", position: "relative", backgroundColor: '#235234', color: 'grey', '&:hover': { backgroundColor: '#235234', color: 'white' } }}
+                  <Button
+                    fullWidth
+                    size="large"
+                    sx={{
+                      top: "7vh",
+                      right: "2vh",
+                      position: "relative",
+                      backgroundColor: 'rgba(35, 82, 52, 0.7)',
+                      color: 'grey',
+                      backdropFilter: 'blur(10px)',
+                      borderRadius: '10px',
+                      width: '100%', // Further increased width
+                      padding: '12px 24px', // Added padding for a larger appearance
+                      fontSize: '1rem', // Slightly increased font size
+                      '&:hover': {
+                        backgroundColor: 'rgba(35, 82, 52, 0.9)',
+                        color: 'white',
+                      },
+                    }}
                     variant="contained"
-                    onClick={() => handleClick(index)}>Login</Button>
+                    onClick={() => handleClick(index)}
+                  >
+                    Login
+                  </Button>
                 </CardActions>
               </CardOverlay>
             </StyledCard>
