@@ -103,8 +103,8 @@ const services = [
     description: "Get single lecturer data - viewable for any user role",
   },
   {
-    route: "/create-checkout-session",
-    target: `${process.env.SERVICE_NAME_AUTH}/create-checkout-session`,
+    route: "/checkout",
+    target: `${process.env.SERVICE_NAME_PAY}/create-checkout-session`,
     headers: { "x-api-key": "apikey" },
     description: "Stripe checkout session creation",
   },
