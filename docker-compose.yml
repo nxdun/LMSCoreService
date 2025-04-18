@@ -1,6 +1,5 @@
 version: "3.8"
 services:
-  
   api-gateway:
     container_name: gateway
     build: ./backend/api-gateway/
@@ -21,7 +20,7 @@ services:
     container_name: authentication
     build: ./backend/authentication-service/
     ports:
-      - "2222:2222" 
+      - "2222:2222"
     volumes:
       - ./backend/authentication-service:/app
     environment:
@@ -29,6 +28,7 @@ services:
       - DB=***REMOVED***authentication-service?retryWrites=true&w=majority&appName=LMS
       - JWTPRIVATEKEY=shit01
       - SALT=10
+      - API_GATEWAY_ADDRESS=http://api-gateway:5001
 
   lecturer-service:
     container_name: lecurers
@@ -36,7 +36,7 @@ services:
     ports:
       - "1113:1113"
     volumes:
-    - ./backend/lecturer-service/src:/app/src
+      - ./backend/lecturer-service/src:/app/src
 
   payment-service:
     container_name: payments
@@ -76,7 +76,7 @@ services:
       - "2345:2345"
     volumes:
       - ./backend/storage-service:/app
-      
+
   # profile-management-service:
   #     container_name: profiles
   #     build: ./backend/profile-management-service/
@@ -87,5 +87,3 @@ services:
   #     environment:
   #       - PORT=1117
   #       - MONGODB_URI=mongodb+srv://zombie:boooooo@nxdun.dio0b.mongodb.net/profile-management-service?retryWrites=true&w=majority&appName=LMS
-        
-
