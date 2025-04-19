@@ -2,7 +2,7 @@ const Ticket = require("../models/TicketModel");
 const axios = require("axios"); // Make sure axios is installed
 
 // Email service configuration
-const EMAIL_SERVICE_URL = process.env.EMAIL_SERVICE_URL || "http://email-service:8076";
+const EMAIL_SERVICE_URL = process.env.EMAIL_SERVICE_URL || "http://localhost:8076";
 
 // Helper function to send emails through the email service
 const sendEmail = async (to, subject, text) => {

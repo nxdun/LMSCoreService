@@ -1,0 +1,60 @@
+# support-backend-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: support-backend
+  labels:
+    app: support-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: support-backend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: support-backend
+    spec:
+      containers:
+        - name: support-backend
+          image: support-backend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8074
+          env:
+            - name: MONGODB_URI
+              value: "***REMOVED***ds?retryWrites=true&w=majority"
+            - name: SECRET_KEY
+              value: "mysecret"
+            - name: PORT
+              value: "8074"
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+          volumeMounts:
+            - name: support-backend-volume
+              mountPath: /usr/src/app
+      volumes:
+        - name: support-backend-volume
+          persistentVolumeClaim:
+            claimName: support-backend-pvc
+
+# support-backend-pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: support-backend-pvc
+  labels:
+    app: support-backend
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

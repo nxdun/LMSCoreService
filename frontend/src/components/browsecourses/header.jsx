@@ -20,11 +20,10 @@ import {
   MenuItem,
 } from "@mui/material";
 
-import "src/styles/index.css";
+import "src/index.css";
 import propsval from "prop-types";
 
 import { useState } from "react";
-import axios from "axios";
 
 import ChromeReaderModeTwoToneIcon from "@mui/icons-material/ChromeReaderModeTwoTone";
 import LanguageTwoToneIcon from "@mui/icons-material/LanguageTwoTone";

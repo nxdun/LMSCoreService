@@ -25,3 +25,13 @@ try to run open all backends seprately for dev
 ## how to run on mac
 - chmod +x open_all_backend.
 - ./open_all_backend.sh
+
+
+# Start & Build All containers.
+```
+docker-compose up --build
+```
+# Run the containers
+```
+docker-compose up
+```

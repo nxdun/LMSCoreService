@@ -3,14 +3,14 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useLocation } from 'react-router-dom';
 import { Button, Typography, Paper } from '@mui/material';
 
-function PaymentPage({ apiUrl }) {
+function PaymentPage() {
   const location = useLocation();
   const { courseData } = location.state;
   console.log('Courseid:', courseData._id);
 
   const makePayment = async () => {
     try {
-      const stripe = await loadStripe('pk_test_51PBff92LxlKPHBMAvdpHbLfvrowceNrOKe3HkNoVG8b9ZSAvn1vbdR11MjTIDw8gHmNI9BSt8VwNxeHrOe43Nrzg00HWzJkvXo');
+      const stripe = await loadStripe('pk_test_51PBfN6Rw8nSAo9nW8VB9Pscz74HIE3v3othGtpqNfYzrtXcLImTcgzD3h8DoOPRXDuKkzqSrxq49xvehsL1bGcGL003OHNGvyi');
 
       const body = {
         products: [
@@ -26,8 +26,9 @@ function PaymentPage({ apiUrl }) {
       const headers = {
         'Content-Type': 'application/json',
       };
-
-      const response = await fetch(`${apiUrl}/create-checkout-session`, {
+      const apiUrl = import.meta.env.VITE_AUTH_SERVER
+      console.log(`${apiUrl}/create-checkout-session`);
+      const response = await fetch(`${apiUrl}/checkout`, {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(body),

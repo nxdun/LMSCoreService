@@ -24,7 +24,7 @@ app.use(cookieParser());
 const db = process.env.MONGODB_URI;
 
 mongoose
-    .connect('***REMOVED***ds?retryWrites=true&w=majority')
+    .connect('mongodb+srv://udeesha:udeesha@cluster0.wenl8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
     .then(() => console.log('MongoDB successfully connected'))
     .catch(err => console.log(err));
 
