@@ -1,4 +1,5 @@
 version: "3.8"
+
 services:
   authentication-service:
     container_name: authentication
@@ -28,6 +29,10 @@ services:
       - SERVICE_NAME_NOTIFICATION=http://notification-service:1114
       - SERVICE_NAME_PROFILE=http://profile-management-SERVICE:1117
       - SERVICE_NAME_STORAGE=http://storage-service:2345
+      - SERVICE_NAME_SUPPORT=http://localhost:1118
+      - SERVICE_NAME_NOTIFICATION=http://localhost:1114/
+      - SERVICE_NAME_EMAIL=http://localhost:8076
+      - SERVICE_NAME_CERT=http://localhost:8080
 
   lecturer-service:
     container_name: lecurers
@@ -138,11 +143,27 @@ services:
     networks:
       - lms-network
 
+  certificate-service:
+    build:
+      context: ./backend/certificate-issue-service/
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    container_name: certificate-issue-service
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend/certificate-issue-service:/usr/app
+      - /usr/app/node_modules
+    networks:
+      - lms-network
+
 networks:
   lms-network:
     driver: bridge
 
 volumes:
   postgres_data:
+
 
 
