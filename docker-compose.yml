@@ -1,11 +1,12 @@
 version: "3.8"
+
 services:
   authentication-service:
     container_name: authentication
     build:
       context: ./backend/authentication-service/
       dockerfile: Dockerfile
-    platform: linux/amd64  # Move platform here (outside of build)
+    platform: linux/amd64
     ports:
       - "2222:2222"
     volumes:
@@ -21,7 +22,7 @@ services:
     build:
       context: ./backend/API-gateway/
       dockerfile: Dockerfile
-    platform: linux/amd64  # Move platform here
+    platform: linux/amd64
     ports:
       - "5001:5001"
     volumes:
@@ -42,12 +43,11 @@ services:
     build: 
       context: ./backend/lecturer-service/
       dockerfile: Dockerfile
-    platform: linux/amd64  # Move platform here
+    platform: linux/amd64
     ports:
       - "1113:1113"
     volumes:
       - ./backend/lecturer-service:/app
-
       - ./backend/lecturer-service/src:/app/src
 
   payment-service:
@@ -55,7 +55,7 @@ services:
     build: 
       context: ./backend/payment-service-py/
       dockerfile: Dockerfile
-    platform: linux/amd64  # Move platform here
+    platform: linux/amd64
     ports:
       - "3001:3001"
     volumes:
@@ -69,7 +69,7 @@ services:
     build:
       context: ./backend/coursemanagement-service/
       dockerfile: Dockerfile
-    platform: linux/amd64  # Move platform here
+    platform: linux/amd64
     ports:
       - "3002:3002"
     volumes:
@@ -82,7 +82,7 @@ services:
     build:
       context: ./backend/storage-service/
       dockerfile: Dockerfile
-    platform: linux/amd64  # Move platform here
+    platform: linux/amd64
     ports:
       - "2345:2345"
     volumes:
@@ -92,7 +92,7 @@ services:
     build:
       context: ./backend/notify-by-udeesha/
       dockerfile: Dockerfile
-    platform: linux/amd64  # Move platform here
+    platform: linux/amd64
     ports:
       - "1114:1114"
     environment:
@@ -118,7 +118,7 @@ services:
     build:
       context: ./backend/supportbackend/
       dockerfile: Dockerfile
-    platform: linux/amd64  # Move platform here
+    platform: linux/amd64
     container_name: support-backend
     restart: unless-stopped
     ports:
@@ -139,7 +139,7 @@ services:
     build:
       context: ./backend/email-service/
       dockerfile: Dockerfile
-    platform: linux/amd64  # Move platform here
+    platform: linux/amd64
     container_name: email-service
     restart: unless-stopped
     ports:
@@ -150,20 +150,20 @@ services:
     networks:
       - lms-network
 
-    certificate-service:
-      build:
-        context: ./backend/certificate-service/
-        dockerfile: Dockerfile
-      platform: linux/amd64  # Move platform here
-      container_name: certificate-service
-      restart: unless-stopped
-      ports:
-        - "8080:8080"
-      volumes:
-        - ./backend/certificate-service:/usr/app
-        - /usr/app/node_modules
-      networks:
-        - lms-network
+  certificate-service:
+    build:
+      context: ./backend/certificate-issue-service/
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    container_name: certificate-issue-service
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend/certificate-issue-service:/usr/app
+      - /usr/app/node_modules
+    networks:
+      - lms-network
 
 networks:
   lms-network:
@@ -171,5 +171,6 @@ networks:
 
 volumes:
   postgres_data:
+
 
 
