@@ -5,7 +5,7 @@
  * authentication, logging, and error handling.
  *
  * @author nxdun
- * @version 1.0.0
+ * @version 1.0.2
  */
 
 const express = require("express");
@@ -135,7 +135,7 @@ const services = [
   },
   {
     route: "/addcoursecontent",
-    target: `${process.env.SERVICE_NAME_COURSE}/api/v1/content`,
+    target: `${process.env.SERVICE_NAME_STORAGE}/api/v1/content`,
     headers: { "x-api-key": "apikey" },
     description: "Course content management",
   },
