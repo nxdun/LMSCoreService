@@ -1,4 +1,3 @@
-
 import { loadStripe } from '@stripe/stripe-js';
 import { useLocation } from 'react-router-dom';
 import { Button, Typography, Paper } from '@mui/material';
@@ -26,7 +25,7 @@ function PaymentPage() {
       const headers = {
         'Content-Type': 'application/json',
       };
-      const apiUrl = import.meta.env.VITE_AUTH_SERVER
+      const apiUrl = import.meta.env.VITE_AUTH_SERVER;
       console.log(`${apiUrl}/checkout`);
       const response = await fetch(`${apiUrl}/checkout`, {
         method: 'POST',
@@ -48,22 +47,58 @@ function PaymentPage() {
       }
     } catch (error) {
       console.error('Error making payment:', error);
-      // Handle error, e.g., show error message to user
     }
   };
 
   return (
-    <Paper elevation={3} style={{ padding: '20px', maxWidth: '400px', margin: 'auto', marginTop: '50px', borderRadius: '15px', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-      <Typography variant="h4" gutterBottom align="center">Enroll in {courseData.course_title}</Typography>
-      <Typography variant="h5" gutterBottom align="center">Proceed to Checkout</Typography>
+    <Paper
+      elevation={3}
+      style={{
+        padding: '20px',
+        maxWidth: '450px',
+        height: '500px',
+        margin: 'auto',
+        marginTop: '50px',
+        borderRadius: '15px',
+        backdropFilter: 'blur(10px)',
+        background: 'rgba(255, 255, 255, 0.1)',
+        border: '1px solid rgba(255, 255, 255, 0.3)',
+        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+        color: 'white',
+      }}
+    >
+      <Typography variant="h4" gutterBottom align="center" color="white">
+        Enroll in {courseData.course_title}
+      </Typography>
+      <Typography variant="h5" gutterBottom align="center" color="white">
+        Proceed to Checkout
+      </Typography>
 
       {/* Display course information */}
-      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-        
-        <img src={courseData.course_picture} alt={courseData.course_title} style={{ width: '200px', height: '200px', borderRadius: '10px', marginTop: '10px' }} />
-        <br/>
-        <Typography variant="subtitle1">Name: <strong> {courseData.course_title} </strong></Typography>
-        <Typography variant="subtitle1">Course price:<strong> ${Number(courseData.price).toFixed(2)} </strong></Typography>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginBottom: '20px',
+        }}
+      >
+        <img
+          src={courseData.course_picture}
+          alt={courseData.course_title}
+          style={{
+            width: '300px',
+            height: '200px',
+            borderRadius: '10px',
+            marginTop: '10px',
+          }}
+        />
+        <Typography variant="subtitle1" color="white">
+          Name: <strong>{courseData.course_title}</strong>
+        </Typography>
+        <Typography variant="subtitle1" color="white">
+          Course price: <strong>${Number(courseData.price).toFixed(2)}</strong>
+        </Typography>
       </div>
 
       <Button
@@ -72,10 +107,17 @@ function PaymentPage() {
         size="large"
         fullWidth
         onClick={makePayment}
-        style={{ borderRadius: '10px', padding: '10px', marginTop: '20px', backgroundColor: '#6200EE', color: '#FFFFFF', fontWeight: 'bold' }}
+        style={{
+          borderRadius: '10px',
+          padding: '10px',
+          marginTop: '20px',
+          backgroundColor: '#11bf20',
+          color: '#FFFFFF',
+          fontWeight: 'bold',
+        }}
         sx={{
           '&:hover': {
-            backgroundColor: '#3700B3',
+            backgroundColor: '#0b780a',
           },
         }}
       >
