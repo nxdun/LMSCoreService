@@ -8,8 +8,8 @@ ARG JAR_FILE=target/*.jar
 #copy to vm
 COPY ./target/lecsrv-0.0.1-SNAPSHOT.jar app.jar
 
-# expose the port
+# Expose the port
 EXPOSE 1113
 
-#set entry
-ENTRYPOINT [ "java", "-jar", "/app.jar" ]
+# Set entry point
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
