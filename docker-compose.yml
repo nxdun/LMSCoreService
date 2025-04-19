@@ -150,6 +150,21 @@ services:
     networks:
       - lms-network
 
+    certificate-service:
+      build:
+        context: ./backend/certificate-service/
+        dockerfile: Dockerfile
+      platform: linux/amd64  # Move platform here
+      container_name: certificate-service
+      restart: unless-stopped
+      ports:
+        - "8080:8080"
+      volumes:
+        - ./backend/certificate-service:/usr/app
+        - /usr/app/node_modules
+      networks:
+        - lms-network
+
 networks:
   lms-network:
     driver: bridge
