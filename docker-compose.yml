@@ -2,9 +2,12 @@ version: "3.8"
 services:
   authentication-service:
     container_name: authentication
-    build: ./backend/authentication-service/
+    build:
+      context: ./backend/authentication-service/
+      dockerfile: Dockerfile
+    platform: linux/amd64  # Move platform here (outside of build)
     ports:
-      - "2222:2222" 
+      - "2222:2222"
     volumes:
       - ./backend/authentication-service:/app
     environment:
@@ -12,34 +15,45 @@ services:
       - DB=mongodb+srv://
       - JWTPRIVATEKEY=shit01
       - SALT=10
+
   api-gateway:
     container_name: gateway
-    build: ./backend/api-gateway/
+    build:
+      context: ./backend/API-gateway/
+      dockerfile: Dockerfile
+    platform: linux/amd64  # Move platform here
     ports:
       - "5000:5000"
     volumes:
-      - ./backend/api-gateway:/app
+      - ./backend/API-gateway:/app
     environment:
       - SERVICE_NAME_LEC=http://lecturer-service:1113
       - SERVICE_NAME_AUTH=http://authentication-service:2222
       - SERVICE_NAME_PAY=http://payment-service:3001
       - SERVICE_NAME_COURSE=http://coursemanagement-service:3002
-      - SERVICE_NAME_NOTIFICATION=http://notification-service:1114
       - SERVICE_NAME_PROFILE=http://profile-management-SERVICE:1117
       - SERVICE_NAME_STORAGE=http://storage-service:2345
       - SERVICE_NAME_SUPPORT=http://localhost:1118
       - SERVICE_NAME_NOTIFICATION=http://localhost:1114/
+      - SERVICE_NAME_EMAIL=http://localhost:8076
 
   lecturer-service:
     container_name: lecurers
-    build: ./backend/lecturer-service/
+    build: 
+      context: ./backend/lecturer-service/
+      dockerfile: Dockerfile
+    platform: linux/amd64  # Move platform here
     ports:
       - "1113:1113"
     volumes:
-      - ./backend/authentication-service:/app
+      - ./backend/lecturer-service:/app
+
   payment-service:
     container_name: payments
-    build: ./backend/payment-service-py/
+    build: 
+      context: ./backend/payment-service-py/
+      dockerfile: Dockerfile
+    platform: linux/amd64  # Move platform here
     ports:
       - "3001:3001"
     volumes:
@@ -47,9 +61,13 @@ services:
     environment:
       STRIPE_SECRET_KEY: "sk_test_51PBff92LxlKPHBMAiyaAfpPv4m43et8Lo3JSoce8Vy6hODBwhwcOghK5UnPWsKEqHN1B0KYScn4raFtoFaYQh5tW00MSqrccuW"
       CLIENT_URL: "http://localhost:5173"
+
   coursemanagement-service:
     container_name: courses
-    build: ./backend/coursemanagement-service/
+    build:
+      context: ./backend/coursemanagement-service/
+      dockerfile: Dockerfile
+    platform: linux/amd64  # Move platform here
     ports:
       - "3002:3002"
     volumes:
@@ -59,7 +77,10 @@ services:
 
   storage-service:
     container_name: storage
-    build: ./backend/storage-service/
+    build:
+      context: ./backend/storage-service/
+      dockerfile: Dockerfile
+    platform: linux/amd64  # Move platform here
     ports:
       - "2345:2345"
     volumes:
@@ -67,8 +88,9 @@ services:
 
   app:
     build:
-      context: .
-      dockerfile: dockerfile
+      context: ./backend/notify-by-udeesha/
+      dockerfile: Dockerfile
+    platform: linux/amd64  # Move platform here
     ports:
       - "1114:1114"
     environment:
@@ -79,6 +101,7 @@ services:
 
   db:
     image: postgres:14
+    platform: linux/amd64
     container_name: postgres
     environment:
       POSTGRES_USER: postgres
@@ -91,18 +114,19 @@ services:
 
   support-backend:
     build:
-      context: .
+      context: ./backend/supportbackend/
       dockerfile: Dockerfile
+    platform: linux/amd64  # Move platform here
     container_name: support-backend
     restart: unless-stopped
     ports:
       - "8074:8074"
     environment:
-      - MONGODB_URI=mongodb+srv://rukshan:rukshan123@cluster0.w9lemr4.mongodb.net/AssignmentAF?retryWrites=true&w=majority&appName=Cluster0
+      - MONGODB_URI=mongodb://rukshan:rukshan123@ac-abc.mongodb.net:27017/ds?retryWrites=true&w=majority
       - SECRET_KEY=mysecret
       - PORT=8074
     volumes:
-      - ./:/usr/src/app
+      - ./backend/supportbackend:/usr/src/app
       - /usr/src/app/node_modules
     networks:
       - lms-network
@@ -111,14 +135,15 @@ services:
 
   email-service:
     build:
-      context: .
-      dockerfile: dockerfile
+      context: ./backend/email-service/
+      dockerfile: Dockerfile
+    platform: linux/amd64  # Move platform here
     container_name: email-service
     restart: unless-stopped
     ports:
       - "8076:8076"
     volumes:
-      - ./:/usr/app
+      - ./backend/email-service:/usr/app
       - /usr/app/node_modules
     networks:
       - lms-network
