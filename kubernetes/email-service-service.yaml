@@ -1,0 +1,17 @@
+---
+# email-service-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: email-service
+  labels:
+    app: email-service
+spec:
+  ports:
+    - port: 8076
+      targetPort: 8076
+      protocol: TCP
+      name: http
+  selector:
+    app: email-service
+---
