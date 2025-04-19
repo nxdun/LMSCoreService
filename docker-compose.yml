@@ -2,60 +2,47 @@ version: "3.8"
 services:
   authentication-service:
     container_name: authentication
-    build:
-      context: ./backend/authentication-service/
-      dockerfile: Dockerfile
-    platform: linux/amd64  # Move platform here (outside of build)
+    build: ./backend/authentication-service/
     ports:
-      - "2222:2222"
+      - "2222:2222" 
     volumes:
       - ./backend/authentication-service:/app
     environment:
       - API_KEY=apikey
-      - DB=mongodb+srv://
+      - DB=mongodb+srv://daddylynx:BABOON.RELAY.SNAP.CRAP.FLY.MOON.ZERO.END.MACHINE@lynx.elpdp.mongodb.net/authentication-service?retryWrites=true&w=majority&appName=LMS
       - JWTPRIVATEKEY=shit01
       - SALT=10
 
   api-gateway:
     container_name: gateway
-    build:
-      context: ./backend/API-gateway/
-      dockerfile: Dockerfile
-    platform: linux/amd64  # Move platform here
+    build: ./backend/api-gateway/
     ports:
       - "5001:5001"
     volumes:
-      - ./backend/API-gateway:/app
+      - ./backend/api-gateway:/app
     environment:
       - SERVICE_NAME_LEC=http://lecturer-service:1113
       - SERVICE_NAME_AUTH=http://authentication-service:2222
       - SERVICE_NAME_PAY=http://payment-service:3001
       - SERVICE_NAME_COURSE=http://coursemanagement-service:3002
+      - SERVICE_NAME_NOTIFICATION=http://notification-service:1114
       - SERVICE_NAME_PROFILE=http://profile-management-SERVICE:1117
       - SERVICE_NAME_STORAGE=http://storage-service:2345
-      - SERVICE_NAME_SUPPORT=http://localhost:1118
-      - SERVICE_NAME_NOTIFICATION=http://localhost:1114/
-      - SERVICE_NAME_EMAIL=http://localhost:8076
 
   lecturer-service:
     container_name: lecurers
-    build: 
-      context: ./backend/lecturer-service/
-      dockerfile: Dockerfile
-    platform: linux/amd64  # Move platform here
+    build: ./backend/lecturer-service/
     ports:
       - "1113:1113"
     volumes:
-      - ./backend/lecturer-service:/app
-
-      - ./backend/lecturer-service/src:/app/src
+    - ./backend/lecturer-service/src:/app/src
 
   payment-service:
     container_name: payments
     build: 
       context: ./backend/payment-service-py/
       dockerfile: Dockerfile
-    platform: linux/amd64  # Move platform here
+    platform: linux/amd64 
     ports:
       - "3001:3001"
     volumes:
@@ -69,7 +56,7 @@ services:
     build:
       context: ./backend/coursemanagement-service/
       dockerfile: Dockerfile
-    platform: linux/amd64  # Move platform here
+    platform: linux/amd64 
     ports:
       - "3002:3002"
     volumes:
@@ -82,17 +69,18 @@ services:
     build:
       context: ./backend/storage-service/
       dockerfile: Dockerfile
-    platform: linux/amd64  # Move platform here
+    platform: linux/amd64 
     ports:
       - "2345:2345"
     volumes:
       - ./backend/storage-service:/app
 
-  app:
+  notification-service:
+    container_name: notification
     build:
       context: ./backend/notify-by-udeesha/
       dockerfile: Dockerfile
-    platform: linux/amd64  # Move platform here
+    platform: linux/amd64 
     ports:
       - "1114:1114"
     environment:
@@ -118,7 +106,7 @@ services:
     build:
       context: ./backend/supportbackend/
       dockerfile: Dockerfile
-    platform: linux/amd64  # Move platform here
+    platform: linux/amd64 
     container_name: support-backend
     restart: unless-stopped
     ports:
@@ -139,7 +127,7 @@ services:
     build:
       context: ./backend/email-service/
       dockerfile: Dockerfile
-    platform: linux/amd64  # Move platform here
+    platform: linux/amd64 
     container_name: email-service
     restart: unless-stopped
     ports:
