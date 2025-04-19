@@ -27,7 +27,7 @@ function PaymentPage() {
         'Content-Type': 'application/json',
       };
       const apiUrl = import.meta.env.VITE_AUTH_SERVER
-      console.log(`${apiUrl}/create-checkout-session`);
+      console.log(`${apiUrl}/checkout`);
       const response = await fetch(`${apiUrl}/checkout`, {
         method: 'POST',
         headers: headers,
