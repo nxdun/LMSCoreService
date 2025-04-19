@@ -8,7 +8,7 @@ function sendEmail(to, subject, text) {
         port: 465,
         auth: {
             user: 'udeeshagamage12@zohomail.com',
-            pass: 'r731EzXLULg1'
+            pass: 'udeesha@2003'
         }
     });
 

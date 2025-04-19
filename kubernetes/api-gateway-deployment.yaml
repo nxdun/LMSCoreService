@@ -39,6 +39,12 @@ spec:
               value: http://profile-management-SERVICE:1117
             - name: SERVICE_NAME_STORAGE
               value: http://storage-service:2345
+            - name: SERVICE_NAME_SUPPORT
+              value: http://localhost:1118
+            - name: SERVICE_NAME_Email
+              value: http://localhost:8076
+            
+
           image: api-gateway
           name: gateway
           ports:
