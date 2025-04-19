@@ -121,7 +121,20 @@ const services = [
     headers: {
       "x-api-key": "apikey",
     },
+  },{
+    route: "/support",
+    target: `${process.env.SERVICE_NAME_SUPPORT}/`,
+    headers: {
+      "x-api-key": "apikey",
+    },
   },
+  {
+    route: "/email",
+    target: `${process.env.SERVICE_NAME_EMAIL}/`,
+    headers: {
+      "x-api-key": "apikey",
+    },
+  }
 ];
 
 // Middleware function for setting headers
