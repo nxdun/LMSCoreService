@@ -104,7 +104,7 @@ const services = [
   },
   {
     route: "/checkout",
-    target: `${process.env.SERVICE_NAME_PAY}/create-checkout-session`,
+    target: `${process.env.SERVICE_NAME_PAY}`,
     headers: { "x-api-key": "apikey" },
     description: "Stripe checkout session creation",
   },
@@ -197,8 +197,13 @@ function setupProxyRoutes() {
       const proxyOptions = {
         target,
         changeOrigin: true,
-        pathRewrite: {
-          [`^${route}`]: "",
+        pathRewrite: (path, req) => {
+          const serviceRoute = services.find(s => path.startsWith(s.route));
+          if (serviceRoute) {
+            const targetPath = serviceRoute.target.split('/').slice(3).join('/');
+            return targetPath || '';
+          }
+          return path;
         },
         // Optional logging for debugging
         logLevel: isProduction ? 'silent' : 'info',
