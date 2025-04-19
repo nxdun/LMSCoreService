@@ -148,9 +148,23 @@ const services = [
   {
     route: "/getallusers",
     target: `${process.env.SERVICE_NAME_AUTH}/api/v1/users`,
-    headers: { "x-api-key": "apikey" },
-    description: "Admin endpoint to get all users",
+    headers: {
+      "x-api-key": "apikey",
+    },
+  },{
+    route: "/support",
+    target: `${process.env.SERVICE_NAME_SUPPORT}/`,
+    headers: {
+      "x-api-key": "apikey",
+    },
   },
+  {
+    route: "/email",
+    target: `${process.env.SERVICE_NAME_EMAIL}/`,
+    headers: {
+      "x-api-key": "apikey",
+    },
+  }
 ];
 
 // ==========================================================================

@@ -12,7 +12,7 @@ const cors = require('cors');
 
 app.use(cors(
     {
-        origin: ['http://localhost:3000', 'http://localhost:8070'],
+        origin: ['http://localhost:3000', 'http://localhost:1118'],
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
         credentials: true,
     }
@@ -24,7 +24,7 @@ app.use(cookieParser());
 const db = process.env.MONGODB_URI;
 
 mongoose
-    .connect('mongodb+srv://rukshan:rukshan123@cluster0.w9lemr4.mongodb.net/AssignmentAF?retryWrites=true&w=majority&appName=Cluster0', { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect('***REMOVED***ds?retryWrites=true&w=majority')
     .then(() => console.log('MongoDB successfully connected'))
     .catch(err => console.log(err));
 
