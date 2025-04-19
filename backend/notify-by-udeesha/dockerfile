@@ -1,17 +1,19 @@
-FROM node:16
+FROM node:20-alpine
 
-# Set the working directory
+# Create app directory
 WORKDIR /app
 
-# Copy package.json and install dependencies
-COPY package.json /app
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
 RUN npm install
 
-# Copy the rest of the application code
-COPY . /app
+# Copy app source
+COPY . .
 
-# Expose the application port
+# Expose the port the app runs on
 EXPOSE 1114
 
-# Start the application
+# Command to run the app
 CMD ["npm", "start"]
