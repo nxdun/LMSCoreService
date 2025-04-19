@@ -38,6 +38,13 @@ def create_checkout_session():
     )# Create a new Checkout Session using the data passed in
 
     return jsonify({'id': session.id})# Return the session ID
+
+# Add this new route to handle API Gateway requests at root path
+@app.route('/', methods=['POST'])
+def root_checkout():
+    # Just call the existing function
+    return create_checkout_session()
+
 # route for testing
 @app.route('/test', methods=['GET'])
 def test():

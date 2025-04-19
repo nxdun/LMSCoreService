@@ -55,6 +55,7 @@ __pycache__/
 **/.mvn/
 **/mvnw
 **/mvnw.cmd
+**/application.properties
 /backend/lecturer-service/.mvn
 target/
 
@@ -90,5 +91,4 @@ docker-compose.override.yml
 build/
 out/
 *.class
-/backend/lecturer-service/src/main/resources/application.properties
 docker-compose.yml
