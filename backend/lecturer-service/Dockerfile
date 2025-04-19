@@ -1,5 +1,6 @@
 # Springboot base image
-FROM openjdk:17-jdk-alpine
+FROM eclipse-temurin:17-jdk-alpine
+
 
 # add argument to run
 ARG JAR_FILE=target/*.jar
