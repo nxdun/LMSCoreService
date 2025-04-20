@@ -9,6 +9,16 @@ const RatingRouter=require('./routes/ratingRoutes')
 const app = express();
 require('dotenv').config();
 const cors = require('cors');
+const promBundle = require('express-prom-bundle');
+const metricsMiddleware = promBundle({
+  includeMethod: true,
+  includePath: true,
+  promClient: {
+    collectDefaultMetrics: {
+      timeout: 5000
+    }
+  }
+});
 
 app.use(cors(
     {
@@ -28,6 +38,7 @@ mongoose
     .then(() => console.log('MongoDB successfully connected'))
     .catch(err => console.log(err));
 
+app.use(metricsMiddleware);
 app.use('/api', tickerRouter);
 app.use('/api', RatingRouter);
 // app.use('/api', paymentRouter);

@@ -13,6 +13,8 @@ services:
       - DB=***REMOVED***authentication-service?retryWrites=true&w=majority&appName=LMS
       - JWTPRIVATEKEY=shit01
       - SALT=10
+    networks:
+      - lms-network
 
   api-gateway:
     container_name: gateway
@@ -29,10 +31,21 @@ services:
       - SERVICE_NAME_NOTIFICATION=http://notification-service:1114
       - SERVICE_NAME_PROFILE=http://profile-management-SERVICE:1117
       - SERVICE_NAME_STORAGE=http://storage-service:2345
-      - SERVICE_NAME_SUPPORT=http://localhost:1118
-      - SERVICE_NAME_NOTIFICATION=http://localhost:1114/
-      - SERVICE_NAME_EMAIL=http://localhost:8076
-      - SERVICE_NAME_CERT=http://localhost:8080
+      - SERVICE_NAME_SUPPORT=http://support-backend:8074
+      - SERVICE_NAME_EMAIL=http://email-service:8076
+      - SERVICE_NAME_CERT=http://certificate-service:8080
+    networks:
+      - lms-network
+    depends_on:
+      - authentication-service
+      - lecturer-service
+      - payment-service
+      - coursemanagement-service
+      - notification-service
+      - storage-service
+      - support-backend
+      - email-service
+      - certificate-service
 
   lecturer-service:
     container_name: lecurers
@@ -40,7 +53,9 @@ services:
     ports:
       - "1113:1113"
     volumes:
-    - ./backend/lecturer-service/src:/app/src
+      - ./backend/lecturer-service/src:/app/src
+    networks:
+      - lms-network
 
   payment-service:
     container_name: payments
@@ -55,6 +70,8 @@ services:
     environment:
       STRIPE_SECRET_KEY: "***REMOVED***"
       CLIENT_URL: "http://localhost:5173"
+    networks:
+      - lms-network
 
   coursemanagement-service:
     container_name: courses
@@ -68,6 +85,8 @@ services:
       - ./backend/coursemanagement-service:/app
     environment:
       - DB=***REMOVED***coursemanagement-service?retryWrites=true&w=majority&appName=LMS
+    networks:
+      - lms-network
 
   storage-service:
     container_name: storage
@@ -79,6 +98,8 @@ services:
       - "2345:2345"
     volumes:
       - ./backend/storage-service:/app
+    networks:
+      - lms-network
 
   notification-service:
     container_name: notification
@@ -93,6 +114,8 @@ services:
       - PORT=1114
     depends_on:
       - db
+    networks:
+      - lms-network
 
   db:
     image: postgres:14
@@ -106,6 +129,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - lms-network
 
   support-backend:
     build:
@@ -115,11 +140,12 @@ services:
     container_name: support-backend
     restart: unless-stopped
     ports:
-      - "1118:1118"
+      - "8074:8074"  # Changed from 1118:1118 to match environment PORT
     environment:
       - MONGODB_URI=***REMOVED***ds?retryWrites=true&w=majority
       - SECRET_KEY=mysecret
       - PORT=8074
+      - EMAIL_SERVICE_URL=http://email-service:8076  # Added to fix the email connectivity issue
     volumes:
       - ./backend/supportbackend:/usr/src/app
       - /usr/src/app/node_modules
@@ -158,11 +184,44 @@ services:
     networks:
       - lms-network
 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - lms-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "9010:9010"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - lms-network
+    depends_on:
+      - prometheus
+
 networks:
   lms-network:
     driver: bridge
 
 volumes:
+  prometheus_data:
+  grafana_data:
   postgres_data:
 
 
