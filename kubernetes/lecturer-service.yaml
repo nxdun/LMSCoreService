@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lecturer-service
+  labels:
+    app: lecturer-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lecturer-service
+  template:
+    metadata:
+      labels:
+        app: lecturer-service
+    spec:
+      containers:
+      - name: lecturer-service
+        image: lms/lecturer-service:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 1113
+        volumeMounts:
+        - name: src-volume
+          mountPath: /app/src
+      volumes:
+      - name: src-volume
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lecturer-service
+spec:
+  selector:
+    app: lecturer-service
+  ports:
+  - port: 1113
+    targetPort: 1113
+  type: ClusterIP

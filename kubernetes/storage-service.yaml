@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storage-service
+  labels:
+    app: storage-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: storage-service
+  template:
+    metadata:
+      labels:
+        app: storage-service
+    spec:
+      containers:
+      - name: storage-service
+        image: lms/storage-service:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 2345
+        volumeMounts:
+        - name: app-volume
+          mountPath: /app
+        - name: key-volume
+          mountPath: /app/key.json
+          subPath: key.json
+      volumes:
+      - name: app-volume
+        emptyDir: {}
+      - name: key-volume
+        secret:
+          secretName: gcloud-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: storage-service
+spec:
+  selector:
+    app: storage-service
+  ports:
+  - port: 2345
+    targetPort: 2345
+  type: ClusterIP

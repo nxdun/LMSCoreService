@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: certificate-service-config
+data:
+  PORT: "8080"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: certificate-service-secrets
+type: Opaque
+stringData:
+  MONGO_URI: "mongodb://your-mongo-connection-string/certificates"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: certificate-service
+  labels:
+    app: certificate-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: certificate-service
+  template:
+    metadata:
+      labels:
+        app: certificate-service
+    spec:
+      containers:
+      - name: certificate-service
+        image: lms/certificate-service:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: certificate-service-config
+        - secretRef:
+            name: certificate-service-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: certificate-service
+spec:
+  selector:
+    app: certificate-service
+  ports:
+  - port: 8080
+    targetPort: 8080
+  type: ClusterIP

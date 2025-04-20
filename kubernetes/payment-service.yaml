@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payment-config
+data:
+  CLIENT_URL: "http://localhost:5173"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: payment-secrets
+type: Opaque
+stringData:
+  STRIPE_SECRET_KEY: "***REMOVED***"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service
+  labels:
+    app: payment-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-service
+  template:
+    metadata:
+      labels:
+        app: payment-service
+    spec:
+      containers:
+      - name: payment-service
+        image: lms/payment-service:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3001
+        envFrom:
+        - configMapRef:
+            name: payment-config
+        - secretRef:
+            name: payment-secrets
+        volumeMounts:
+        - name: app-volume
+          mountPath: /app
+      volumes:
+      - name: app-volume
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-service
+spec:
+  selector:
+    app: payment-service
+  ports:
+  - port: 3001
+    targetPort: 3001
+  type: ClusterIP

@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: coursemanagement-secrets
+type: Opaque
+stringData:
+  DB: "***REMOVED***coursemanagement-service?retryWrites=true&w=majority&appName=LMS"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coursemanagement-service
+  labels:
+    app: coursemanagement-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: coursemanagement-service
+  template:
+    metadata:
+      labels:
+        app: coursemanagement-service
+    spec:
+      containers:
+      - name: coursemanagement-service
+        image: lms/coursemanagement-service:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3002
+        envFrom:
+        - secretRef:
+            name: coursemanagement-secrets
+        volumeMounts:
+        - name: app-volume
+          mountPath: /app
+      volumes:
+      - name: app-volume
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: coursemanagement-service
+spec:
+  selector:
+    app: coursemanagement-service
+  ports:
+  - port: 3002
+    targetPort: 3002
+  type: ClusterIP

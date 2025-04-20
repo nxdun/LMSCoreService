@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: support-backend-config
+data:
+  PORT: "8074"
+  EMAIL_SERVICE_URL: "http://email-service:8076"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: support-backend-secrets
+type: Opaque
+stringData:
+  MONGODB_URI: "***REMOVED***ds?retryWrites=true&w=majority"
+  SECRET_KEY: "mysecret"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: support-backend
+  labels:
+    app: support-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: support-backend
+  template:
+    metadata:
+      labels:
+        app: support-backend
+    spec:
+      containers:
+      - name: support-backend
+        image: lms/support-backend:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8074
+        envFrom:
+        - configMapRef:
+            name: support-backend-config
+        - secretRef:
+            name: support-backend-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: support-backend
+spec:
+  selector:
+    app: support-backend
+  ports:
+  - port: 8074
+    targetPort: 8074
+  type: ClusterIP

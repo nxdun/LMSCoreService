@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: authentication-config
+data:
+  API_KEY: "apikey"
+  SALT: "10"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authentication-secrets
+type: Opaque
+stringData:
+  DB: "***REMOVED***authentication-service?retryWrites=true&w=majority&appName=LMS"
+  JWTPRIVATEKEY: "shit01"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authentication-service
+  labels:
+    app: authentication-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authentication-service
+  template:
+    metadata:
+      labels:
+        app: authentication-service
+    spec:
+      containers:
+      - name: authentication-service
+        image: lms/authentication-service:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 2222
+        envFrom:
+        - configMapRef:
+            name: authentication-config
+        - secretRef:
+            name: authentication-secrets
+        volumeMounts:
+        - name: app-volume
+          mountPath: /app
+      volumes:
+      - name: app-volume
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authentication-service
+spec:
+  selector:
+    app: authentication-service
+  ports:
+  - port: 2222
+    targetPort: 2222
+  type: ClusterIP
