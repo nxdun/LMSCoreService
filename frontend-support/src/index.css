@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  /* Set default colors directly */
+  color: #213547;
+  background-color: #ffffff;
+}
+
+/* Dark mode styles (default) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
+  }
+  
+  button {
+    background-color: #1a1a1a;
+    color: #ffffff;
+  }
+  
+  button:hover {
+    background-color: #333333;
+  }
+  
+  a {
+    color: #646cff;
+  }
+  
+  a:hover {
+    color: #535bf2;
+  }
+}
+
+/* Light mode styles */
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+    color: #213547;
+    background-color: #ffffff;
+  }
+  
+  body {
+    color: #213547;
+  }
+  
+  button {
+    background-color: #f1f5f9;
+    color: #1e293b;
+  }
+  
+  button:hover {
+    background-color: #e2e8f0;
+  }
+  
+  a {
+    color: #3b82f6;
+  }
+  
+  a:hover {
+    color: #2563eb;
+  }
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  color: #213547; /* Explicitly set body text color */
+}
+
+/* Set colors for all major text elements */
+h1, h2, h3, h4, h5, h6, p, span, div, label {
+  color: #213547;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #2563eb;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #f1f5f9;
+  color: #1e293b;
+  cursor: pointer;
+  transition: border-color 0.25s, background-color 0.25s;
+}
+
+button:hover {
+  background-color: #e2e8f0;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Apply dark backgrounds with light text to specific components like headers */
+.header, .footer, .sidebar {
+  background-color: #1e293b;
+  color: #ffffff;
+}
+
+.header a, .footer a, .sidebar a {
+  color: #ffffff;
+}
+
+.header a:hover, .footer a:hover, .sidebar a:hover {
+  color: #e2e8f0;
+}
+
+/* Add this at the end of your file to ensure it overrides other styles */
+
+/* Global text color override - Force dark text on light backgrounds */
+body, p, h1, h2, h3, h4, h5, h6, span, div, td, th, li, label, input, textarea {
+  color: #1f2937 !important; 
+}
+
+/* Preserve white text for specific elements that need it */
+.text-white, 
+button.bg-red-600, 
+button.bg-green-600, 
+button.bg-blue-600,
+.header, 
+.footer, 
+.bg-blue-600 *, 
+.bg-red-600 *, 
+.bg-green-600 *,
+.sidebar * {
+  color: white !important;
+}
+
+/* For any specific components that might need attention */
+.text-gray-800 {
+  color: #1f2937 !important;
+}
+
+.text-gray-600 {
+  color: #4b5563 !important;
+}
+
+.text-gray-500 {
+  color: #6b7280 !important;
+}
+
+/* Make sure dynamic content is visible */
+[data-from-backend] {
+  color: #1f2937 !important;
+}
