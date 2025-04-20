@@ -3,12 +3,78 @@ global:
   evaluation_interval: 15s
 
 scrape_configs:
-  - job_name: 'support-backend'
+  # Prometheus itself
+  - job_name: 'prometheus'
     static_configs:
-      - targets: ['host.docker.internal:1118']
+      - targets: ['localhost:9090']
+
+  # API Gateway
+  - job_name: 'api-gateway'
+    static_configs:
+      - targets: ['api-gateway:5001']
     metrics_path: /metrics
 
+  # Authentication Service
+  - job_name: 'authentication-service'
+    static_configs:
+      - targets: ['authentication-service:2222']
+    metrics_path: /metrics
+
+  # Lecturer Service
+  - job_name: 'lecturer-service'
+    static_configs:
+      - targets: ['lecturer-service:1113']
+    metrics_path: /actuator/prometheus
+
+  # Payment Service
+  - job_name: 'payment-service'
+    static_configs:
+      - targets: ['payment-service:3001']
+    metrics_path: /metrics
+
+  # Course Management Service
+  - job_name: 'coursemanagement-service'
+    static_configs:
+      - targets: ['coursemanagement-service:3002']
+    metrics_path: /metrics
+
+  # Storage Service
+  - job_name: 'storage-service'
+    static_configs:
+      - targets: ['storage-service:2345']
+    metrics_path: /metrics
+
+  # Notification Service
+  - job_name: 'notification-service'
+    static_configs:
+      - targets: ['notification-service:1114']
+    metrics_path: /metrics
+
+  # Support Backend
+  - job_name: 'support-backend'
+    static_configs:
+      - targets: ['support-backend:8074']
+    metrics_path: /metrics
+
+  # Email Service
   - job_name: 'email-service'
     static_configs:
-      - targets: ['host.docker.internal:8076']
+      - targets: ['email-service:8076']
     metrics_path: /metrics
+
+  # Certificate Service
+  - job_name: 'certificate-service'
+    static_configs:
+      - targets: ['certificate-service:8080']
+    metrics_path: /metrics
+
+  # Database Monitoring
+  - job_name: 'postgresql'
+    static_configs:
+      - targets: ['db:5432']
+    metrics_path: /metrics
+
+  # Node Exporter for Host Metrics
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
