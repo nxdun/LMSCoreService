@@ -1,5 +1,5 @@
-# .github/workflows/secure-cicd.yml
-name: Secure CI/CD Pipeline
+# .github/workflows/docker-hub-deploy.yml
+name: Deploy to Docker Hub
 
 on:
   push:
@@ -8,51 +8,9 @@ on:
     branches: [ main ]
 
 jobs:
-  security-scan:
-    name: Security Scanning
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      
-      # # SonarCloud scanning
-      # - name: SonarCloud Scan
-      #   uses: SonarSource/sonarcloud-github-action@master
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #   with:
-      #     args: >
-      #       -Dsonar.projectKey=lms-core-service
-      #       -Dsonar.organization=lms-org
-      
-      # # SAST scanning with Snyk
-      # - name: Run Snyk to check for vulnerabilities
-      #   uses: snyk/actions/node@master
-      #   continue-on-error: true
-      #   env:
-      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      #   with:
-      #     args: --severity-threshold=high
-      
-      # # Secrets scanning
-      # - name: TruffleHog OSS
-      #   uses: trufflesecurity/trufflehog@main
-      #   with:
-      #     path: ./
-      #     base: ${{ github.event.repository.default_branch }}
-      #     head: HEAD
-      #     extra_args: --debug --only-verified
-
   build-and-push:
-    name: Build and Push Docker Images
-    needs: security-scan
+    name: Build and Push to Docker Hub
     runs-on: ubuntu-latest
-    if: ${{ success() && (github.event_name == 'push' || github.event.pull_request.merged == true) }}
-    outputs:
-      build_status: ${{ steps.final-status.outputs.status }}
     strategy:
       matrix:
         service: [
@@ -75,16 +33,11 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+          username: udeesharukshan12
+          password: udeesha@123
       
       # Select the correct build context based on service
       - name: Set build context
@@ -92,8 +45,10 @@ jobs:
         run: |
           case ${{ matrix.service }} in
             api-gateway)
-              echo "context=./backend/api-gateway" >> $GITHUB_OUTPUT
-              echo "dockerfile=./backend/api-gateway/Dockerfile" >> $GITHUB_OUTPUT
+
+
+              echo "context=./backend/API-gateway" >> $GITHUB_OUTPUT
+              echo "dockerfile=./backend/API-gateway/Dockerfile" >> $GITHUB_OUTPUT
               ;;
             authentication-service)
               echo "context=./backend/authentication-service" >> $GITHUB_OUTPUT
@@ -133,127 +88,32 @@ jobs:
               ;;
           esac
       
-      # Build and push Docker image
+      # Build and push Docker image to Docker Hub
       - name: Build and push Docker image
-        id: docker-build
         uses: docker/build-push-action@v4
         with:
           context: ${{ steps.set-context.outputs.context }}
           file: ${{ steps.set-context.outputs.dockerfile }}
           push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/${{ matrix.service }}:latest,${{ steps.login-ecr.outputs.registry }}/${{ matrix.service }}:${{ github.sha }}
           platforms: linux/amd64
-          cache-from: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/${{ matrix.service }}:buildcache
-          cache-to: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/${{ matrix.service }}:buildcache,mode=max
+          tags: |
+            udeesharukshan12/${{ matrix.service }}:latest
+            udeesharukshan12/${{ matrix.service }}:${{ github.sha }}
       
-      # Always assume successful build for demo purposes
+      # Log build success
       - name: Log image build success
-        id: build-success-log
         run: |
-          echo "Successfully built and pushed image: ${{ steps.login-ecr.outputs.registry }}/${{ matrix.service }}:${{ github.sha }}"
-          echo "Image size: $(echo $((RANDOM % 500 + 100)))MB"
-          echo "Build time: $(echo $((RANDOM % 120 + 30))) seconds"
-      
-      # Scan container image for vulnerabilities
-      - name: Scan image with Trivy
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ${{ steps.login-ecr.outputs.registry }}/${{ matrix.service }}:${{ github.sha }}
-          format: 'table'
-          exit-code: '0'  # Always pass for demo
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
+          echo "✅ Successfully built and pushed image: udeesharukshan12/${{ matrix.service }}:latest"
+          echo "✅ Also tagged as: udeesharukshan12/${{ matrix.service }}:${{ github.sha }}"
           
-      - name: Set final status
-        id: final-status
-        run: echo "status=success" >> $GITHUB_OUTPUT
-
-  deploy-dev:
-    name: Deploy to Development
+  notify-success:
+    name: Notify Deployment Success
     needs: build-and-push
-    if: needs.build-and-push.outputs.build_status == 'success'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      
-      - name: Deploy CloudFormation stack
+      - name: Deployment Summary
         run: |
-          echo "Deploying CloudFormation stack: lms-dev-stack"
-          echo "Template: cloudformation-ecs-deployment.yml"
-          echo "Environment: development"
-          echo "Status: CREATE_COMPLETE"
-      
-      - name: Update ECS services
-        run: |
-          echo "Updating ECS services in cluster: development-lms-cluster"
-          for service in api-gateway authentication-service lecturer-service payment-service coursemanagement-service storage-service notification-service support-backend email-service certificate-service; do
-            echo "Service $service updated successfully (task definition: $service:$(echo $((RANDOM % 100 + 1))))"
-            echo "Desired count: 2, Running count: 2"
-            echo "Health checks passed: 2/2"
-          done
-          echo "All services deployed successfully to development environment!"
-
-  deploy-prod:
-    name: Deploy to Production
-    needs: build-and-push
-    if: github.ref == 'refs/heads/main' && needs.build-and-push.outputs.build_status == 'success'
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      
-      - name: Deploy CloudFormation stack
-        run: |
-          echo "Deploying CloudFormation stack: lms-prod-stack"
-          echo "Template: cloudformation-ecs-deployment.yml"
-          echo "Environment: production"
-          echo "Status: CREATE_COMPLETE"
-          echo "Stack creation time: $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-      
-      - name: Update ECS services
-        run: |
-          echo "Updating ECS services in cluster: production-lms-cluster"
-          for service in api-gateway authentication-service lecturer-service payment-service coursemanagement-service storage-service notification-service support-backend email-service certificate-service; do
-            echo "Service $service updated successfully (task definition: $service:$(echo $((RANDOM % 100 + 1))))"
-            echo "Desired count: 3, Running count: 3"
-            echo "Health checks passed: 3/3"
-            echo "Target group: $service-tg-prod"
-            echo "Load balancer: lms-production-alb"
-          done
-          echo "All services deployed successfully to production environment!"
-          
-      - name: Run smoke tests
-        run: |
-          echo "Running smoke tests against production environment"
-          echo "Test: User Registration - PASSED"
-          echo "Test: User Login - PASSED"
-          echo "Test: Course Browsing - PASSED"
-          echo "Test: Payment Processing - PASSED"
-          echo "Test: Support Ticket Creation - PASSED"
-          echo "Test: Certificate Generation - PASSED"
-          echo "All smoke tests PASSED"
-          
-      - name: Send deployment notification
-        run: |
-          echo "✅ Production deployment completed successfully"
-          echo "Environment: Production (https://lms.yourdomain.com)"
-          echo "Deployment ID: dp-$(echo $RANDOM | md5sum | head -c 8)"
-          echo "Commit: ${{ github.sha }}"
-          echo "Deployment time: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+          echo "✅ All Docker images successfully pushed to Docker Hub"
+          echo "🔄 Images are now available at: docker.io/udeesharukshan12/<service-name>"
+          echo "🏷️ Tags: latest, ${{ github.sha }}"
+          echo "📅 Deployment time: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
