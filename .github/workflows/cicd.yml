@@ -104,80 +104,80 @@ jobs:
           echo "✅ Successfully built and pushed image: udeesharukshan12/${{ matrix.service }}:latest"
           echo "✅ Also tagged as: udeesharukshan12/${{ matrix.service }}:${{ github.sha }}"
           
-  deploy-to-aws:
-    name: Deploy to AWS with Terraform
-    needs: build-and-push
-    if: github.ref == 'refs/heads/main' # Only deploy on main branch
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  # deploy-to-aws:
+  #   name: Deploy to AWS with Terraform
+  #   needs: build-and-push
+  #   if: github.ref == 'refs/heads/main' # Only deploy on main branch
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
       
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.5.0
+  #     - name: Set up Terraform
+  #       uses: hashicorp/setup-terraform@v2
+  #       with:
+  #         terraform_version: 1.5.0
       
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: us-east-1
       
-      - name: Terraform Init
-        working-directory: ./aws-terraform
-        run: terraform init
+  #     - name: Terraform Init
+  #       working-directory: ./aws-terraform
+  #       run: terraform init
       
-      - name: Terraform Format
-        working-directory: ./aws-terraform
-        run: terraform fmt -check
+  #     - name: Terraform Format
+  #       working-directory: ./aws-terraform
+  #       run: terraform fmt -check
       
-      - name: Terraform Validate
-        working-directory: ./aws-terraform
-        run: terraform validate
+  #     - name: Terraform Validate
+  #       working-directory: ./aws-terraform
+  #       run: terraform validate
       
-      - name: Terraform Plan
-        working-directory: ./aws-terraform
-        run: terraform plan -out=tfplan
+  #     - name: Terraform Plan
+  #       working-directory: ./aws-terraform
+  #       run: terraform plan -out=tfplan
         
-      - name: Terraform Apply
-        working-directory: ./aws-terraform
-        run: terraform apply -auto-approve tfplan
+  #     - name: Terraform Apply
+  #       working-directory: ./aws-terraform
+  #       run: terraform apply -auto-approve tfplan
         
-      - name: Extract Terraform Outputs
-        id: terraform-outputs
-        working-directory: ./aws-terraform
-        run: |
-          echo "instance_ip=$(terraform output -raw instance_public_ip)" >> $GITHUB_OUTPUT
-          echo "application_url=$(terraform output -raw application_url)" >> $GITHUB_OUTPUT
-          echo "prometheus_url=$(terraform output -raw prometheus_url)" >> $GITHUB_OUTPUT
-          echo "grafana_url=$(terraform output -raw grafana_url)" >> $GITHUB_OUTPUT
+  #     - name: Extract Terraform Outputs
+  #       id: terraform-outputs
+  #       working-directory: ./aws-terraform
+  #       run: |
+  #         echo "instance_ip=$(terraform output -raw instance_public_ip)" >> $GITHUB_OUTPUT
+  #         echo "application_url=$(terraform output -raw application_url)" >> $GITHUB_OUTPUT
+  #         echo "prometheus_url=$(terraform output -raw prometheus_url)" >> $GITHUB_OUTPUT
+  #         echo "grafana_url=$(terraform output -raw grafana_url)" >> $GITHUB_OUTPUT
           
-  notify-success:
-    name: Notify Deployment Success
-    needs: [build-and-push, deploy-to-aws]
-    if: always() && (needs.build-and-push.result == 'success')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deployment Summary
-        env:
-          TERRAFORM_SUCCESS: ${{ needs.deploy-to-aws.result == 'success' }}
-          INSTANCE_IP: ${{ needs.deploy-to-aws.outputs.instance_ip || 'Not deployed' }}
-          APP_URL: ${{ needs.deploy-to-aws.outputs.application_url || 'Not deployed' }}
-        run: |
-          echo "✅ All Docker images successfully pushed to Docker Hub"
-          echo "🔄 Images are now available at: docker.io/udeesharukshan12/<service-name>"
-          echo "🏷️ Tags: latest, ${{ github.sha }}"
+  # notify-success:
+  #   name: Notify Deployment Success
+  #   needs: [build-and-push, deploy-to-aws]
+  #   if: always() && (needs.build-and-push.result == 'success')
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Deployment Summary
+  #       env:
+  #         TERRAFORM_SUCCESS: ${{ needs.deploy-to-aws.result == 'success' }}
+  #         INSTANCE_IP: ${{ needs.deploy-to-aws.outputs.instance_ip || 'Not deployed' }}
+  #         APP_URL: ${{ needs.deploy-to-aws.outputs.application_url || 'Not deployed' }}
+  #       run: |
+  #         echo "✅ All Docker images successfully pushed to Docker Hub"
+  #         echo "🔄 Images are now available at: docker.io/udeesharukshan12/<service-name>"
+  #         echo "🏷️ Tags: latest, ${{ github.sha }}"
           
-          if [[ "$TERRAFORM_SUCCESS" == "true" ]]; then
-            echo "✅ AWS infrastructure deployed successfully"
-            echo "🌐 Application URL: $APP_URL"
-            echo "🖥️ EC2 Instance IP: $INSTANCE_IP"
-            echo "📊 Prometheus: ${{ needs.deploy-to-aws.outputs.prometheus_url }}"
-            echo "📈 Grafana: ${{ needs.deploy-to-aws.outputs.grafana_url }}"
-          else
-            echo "⚠️ AWS deployment was skipped or failed"
-          fi
+  #         if [[ "$TERRAFORM_SUCCESS" == "true" ]]; then
+  #           echo "✅ AWS infrastructure deployed successfully"
+  #           echo "🌐 Application URL: $APP_URL"
+  #           echo "🖥️ EC2 Instance IP: $INSTANCE_IP"
+  #           echo "📊 Prometheus: ${{ needs.deploy-to-aws.outputs.prometheus_url }}"
+  #           echo "📈 Grafana: ${{ needs.deploy-to-aws.outputs.grafana_url }}"
+  #         else
+  #           echo "⚠️ AWS deployment was skipped or failed"
+  #         fi
           
-          echo "📅 Deployment time: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+  #         echo "📅 Deployment time: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
