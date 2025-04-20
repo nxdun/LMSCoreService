@@ -9,6 +9,12 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
+# Copy prisma schema
+COPY prisma ./prisma/
+
+# Generate Prisma client for Alpine Linux
+RUN npx prisma generate
+
 # Copy app source
 COPY . .
 
