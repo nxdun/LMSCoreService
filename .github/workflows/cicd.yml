@@ -45,8 +45,8 @@ jobs:
         run: |
           case ${{ matrix.service }} in
             api-gateway)
-              echo "context=./backend/api-gateway" >> $GITHUB_OUTPUT
-              echo "dockerfile=./backend/api-gateway/Dockerfile" >> $GITHUB_OUTPUT
+              echo "context=./backend/API-gateway" >> $GITHUB_OUTPUT
+              echo "dockerfile=./backend/API-gateway/Dockerfile" >> $GITHUB_OUTPUT
               ;;
             authentication-service)
               echo "context=./backend/authentication-service" >> $GITHUB_OUTPUT
