@@ -106,7 +106,7 @@ The Learning Management System (LMS) is a microservice-driven application design
  ├─ issue_date
  ├─ certificate_url
 
-
+```
 
 # lms-microservice
 Development of an Educational Platform for Online Learning Using Microservices
