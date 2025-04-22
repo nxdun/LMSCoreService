@@ -1,11 +1,11 @@
 # .github/workflows/docker-hub-deploy.yml
 name: Deploy to Docker Hub and AWS
 
-on:
-  push:
-    branches: [ main, dev ]
-  pull_request:
-    branches: [ main ]
+# on:
+#   push:
+#     branches: [ main, dev ]
+#   pull_request:
+#     branches: [ main ]
 
 jobs:
   build-and-push:
