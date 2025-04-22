@@ -68,9 +68,6 @@ Thumbs.db
 *.drawio
 
 
-# Kubernetes
-*.kubeconfig
-
 # Misc
 *.local
 .env.development.local
