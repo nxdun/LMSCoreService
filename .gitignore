@@ -70,6 +70,7 @@ Thumbs.db
 # Docker
 .docker/
 docker-compose.override.yml
+docker-compose.yml
 
 # Kubernetes
 *.kubeconfig
@@ -91,4 +92,3 @@ docker-compose.override.yml
 build/
 out/
 *.class
-docker-compose.yml
