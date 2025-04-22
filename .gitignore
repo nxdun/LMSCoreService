@@ -67,10 +67,6 @@ Thumbs.db
 **/.drawio
 *.drawio
 
-# Docker
-.docker/
-docker-compose.override.yml
-docker-compose.yml
 
 # Kubernetes
 *.kubeconfig
